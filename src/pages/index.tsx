@@ -1,11 +1,11 @@
 import { Text } from "@chakra-ui/react";
 import { Container } from "../components/Container";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
+import { NavBar } from "../components/NavBar";
 
 const Index = () => (
   <Container height="100vh">
+    <NavBar />
     <Text color="text">Hello world!</Text>
-    <DarkModeSwitch />
   </Container>
 );
 
