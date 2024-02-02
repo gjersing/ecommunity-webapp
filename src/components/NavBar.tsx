@@ -9,13 +9,15 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useCurrentUserQuery();
 
   let navLinks = null;
-  if (!data?.current_user) {
+  if (fetching) {
+    navLinks = "Loading...";
+  } else if (!data?.current_user) {
     navLinks = (
       <>
         <Link href="/register" as={NextLink} mr={8} color="white">
           Register
         </Link>
-        <Link href="/login" as={NextLink} mr={8} color="white">
+        <Link href="/login" as={NextLink} color="white">
           Login
         </Link>
       </>
@@ -23,8 +25,16 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   } else {
     navLinks = (
       <>
-        <Link href="/login" as={NextLink} mr={8} color="white">
+        <Link
+          href={`/${data.current_user.username}`}
+          as={NextLink}
+          mr={8}
+          color="white"
+        >
           {data.current_user.username}
+        </Link>
+        <Link href="/logout" as={NextLink} color="white">
+          Logout
         </Link>
       </>
     );
@@ -35,8 +45,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       <Link href="/" as={NextLink} ml={8} color="white">
         ECOmmunity
       </Link>
-      <Box ml={"auto"} color="white">
-        {fetching ? "Loading..." : navLinks}
+      <Box ml={"auto"} mr={8} color="white">
+        {navLinks}
       </Box>
     </Flex>
   );
