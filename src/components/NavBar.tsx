@@ -1,12 +1,16 @@
-import { Box, Flex, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, Link } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
-import { useCurrentUserQuery } from "../graphql/generated/graphql";
+import {
+  useCurrentUserQuery,
+  useLogoutMutation,
+} from "../graphql/generated/graphql";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useCurrentUserQuery();
+  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
   let navLinks = null;
   if (fetching) {
@@ -30,19 +34,34 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           as={NextLink}
           mr={8}
           color="white"
+          fontWeight="bold"
         >
           {data.current_user.username}
         </Link>
-        <Link href="/logout" as={NextLink} color="white">
+        <Button
+          onClick={() => {
+            logout({});
+          }}
+          isLoading={logoutFetching}
+          variant="link"
+          color="white"
+        >
           Logout
-        </Link>
+        </Button>
       </>
     );
   }
 
   return (
-    <Flex bg="forestgreen" p={4} w={"100%"}>
-      <Link href="/" as={NextLink} ml={8} color="white">
+    <Flex bg="forestgreen" p={4} w={"100%"} alignItems="center">
+      <Link
+        href="/"
+        as={NextLink}
+        ml={8}
+        color="white"
+        fontWeight="bold"
+        fontSize="x-large"
+      >
         ECOmmunity
       </Link>
       <Box ml={"auto"} mr={8} color="white">

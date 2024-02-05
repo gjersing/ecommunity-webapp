@@ -7,6 +7,7 @@ import {
   CurrentUserDocument,
   CurrentUserQuery,
   LoginMutation,
+  LogoutMutation,
   RegisterMutation,
 } from "../graphql/generated/graphql";
 
@@ -25,6 +26,16 @@ const client = new Client({
     cacheExchange({
       updates: {
         Mutation: {
+          logout: (res, _args, cache, _info) => {
+            typedUpdateQuery<LogoutMutation, CurrentUserQuery>(
+              cache,
+              {
+                query: CurrentUserDocument,
+              },
+              res,
+              () => ({ current_user: null })
+            );
+          },
           login: (res, _args, cache, _info) => {
             typedUpdateQuery<LoginMutation, CurrentUserQuery>(
               cache,
