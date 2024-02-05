@@ -25,13 +25,13 @@ const client = new Client({
     cacheExchange({
       updates: {
         Mutation: {
-          login: (_result, args, cache, info) => {
+          login: (res, _args, cache, _info) => {
             typedUpdateQuery<LoginMutation, CurrentUserQuery>(
               cache,
               {
                 query: CurrentUserDocument,
               },
-              _result,
+              res,
               (result, query) => {
                 if (result.login.errors) {
                   return query;
@@ -43,13 +43,13 @@ const client = new Client({
               }
             );
           },
-          register: (_result, args, cache, info) => {
+          register: (res, _args, cache, _info) => {
             typedUpdateQuery<RegisterMutation, CurrentUserQuery>(
               cache,
               {
                 query: CurrentUserDocument,
               },
-              _result,
+              res,
               (result, query) => {
                 if (result.register.errors) {
                   return query;
