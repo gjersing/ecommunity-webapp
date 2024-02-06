@@ -8,6 +8,8 @@ import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
 import { Container } from "../components/Container";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface registerProps {}
 
@@ -61,4 +63,4 @@ export const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);

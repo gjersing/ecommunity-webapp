@@ -8,10 +8,12 @@ import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
 import { Container } from "../components/Container";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface loginProps {}
 
-export const Register: React.FC<loginProps> = ({}) => {
+export const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
@@ -61,4 +63,4 @@ export const Register: React.FC<loginProps> = ({}) => {
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Login);

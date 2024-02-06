@@ -53,7 +53,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   }
 
   return (
-    <Flex bg="forestgreen" p={4} w={"100%"} alignItems="center">
+    <Flex bg="darkgreen" p={4} w={"100%"} alignItems="center">
       <Link
         href="/"
         as={NextLink}
