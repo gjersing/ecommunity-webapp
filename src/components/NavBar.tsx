@@ -5,11 +5,13 @@ import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from "../graphql/generated/graphql";
+import { useIsClient } from "../utils/isClientContext";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
-  const [{ data, fetching }] = useCurrentUserQuery();
+  const isClient = useIsClient();
+  const [{ data, fetching }] = useCurrentUserQuery({ pause: !isClient });
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
   let navLinks = null;
@@ -22,7 +24,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           Register
         </Link>
         <Link href="/login" as={NextLink} color="white">
-          Login
+          Log In
         </Link>
       </>
     );
