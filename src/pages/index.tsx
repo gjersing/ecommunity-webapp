@@ -1,14 +1,23 @@
-import { Text } from "@chakra-ui/react";
 import { Container } from "../components/Container";
 import { NavBar } from "../components/NavBar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { usePostsQuery } from "../graphql/generated/graphql";
 
-const Index = () => (
-  <Container height="100vh" bgColor="beige">
-    <NavBar />
-    <Text color="text">Hello world!</Text>
-  </Container>
-);
+const Index = () => {
+  const [{ data }] = usePostsQuery();
+  return (
+    <>
+      <Container height="100vh">
+        <NavBar />
+        {!data ? (
+          <div key="spinner">Loading...</div>
+        ) : (
+          data.posts.map((p) => <div key={p.id}>{p.title}</div>)
+        )}
+      </Container>
+    </>
+  );
+};
 
-export default withUrqlClient(createUrqlClient)(Index);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
