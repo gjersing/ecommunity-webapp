@@ -19,7 +19,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   let navLinks = null;
   if (fetching) {
-    navLinks = "Loading...";
+    navLinks = null;
   } else if (!data?.current_user) {
     navLinks = (
       <>
