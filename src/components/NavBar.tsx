@@ -1,11 +1,14 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Link, Text } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from "../graphql/generated/graphql";
+import { Icon } from "@chakra-ui/react";
 import { useIsClient } from "../utils/isClientContext";
+import { DarkModeSwitch } from "./DarkModeSwitch";
+import { GiPlantRoots } from "react-icons/gi";
 
 interface NavBarProps {}
 
@@ -59,15 +62,21 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       <Link
         href="/"
         as={NextLink}
-        ml={8}
+        ml={2}
         color="white"
         fontWeight="bold"
         fontSize="x-large"
       >
-        ECOmmunity
+        <HStack>
+          <Icon as={GiPlantRoots} ml={4} boxSize={8} color="white" />
+          <Text>ECOmmunity</Text>
+        </HStack>
       </Link>
       <Box ml={"auto"} mr={8} color="white">
         {navLinks}
+      </Box>
+      <Box mr={4} display="inline">
+        <DarkModeSwitch />
       </Box>
     </Flex>
   );
