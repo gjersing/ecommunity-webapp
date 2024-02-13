@@ -16,7 +16,6 @@ export const IsClientContextProvider = ({ children }: ChildProps) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    console.log("evaluating server vs client location");
     setIsClient(true);
   }, []);
 
