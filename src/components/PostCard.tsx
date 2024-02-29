@@ -32,7 +32,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     //     {post.title}
     //   </CardBody>
     // </Card>
-    <Card maxH="1000px">
+    <Card>
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
@@ -63,12 +63,13 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <Text>{post.title}</Text>
       </CardBody>
       <Image
-        objectFit="none"
+        objectFit="cover"
+        width="800px"
+        maxHeight="580px"
         objectPosition="center"
         src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?q=80&w=2250&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Chakra UI"
       />
-
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
