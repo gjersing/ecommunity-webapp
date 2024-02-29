@@ -27,16 +27,11 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
-    // <Card mt={3}>
-    //   <CardBody mx={8} my={2}>
-    //     {post.title}
-    //   </CardBody>
-    // </Card>
     <Card>
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
+            <Avatar name="Post Author" src="https://bit.ly/sage-adebayo" />
 
             <Box>
               <Heading size="sm">Post Author</Heading>
@@ -67,8 +62,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         width="800px"
         maxHeight="580px"
         objectPosition="center"
-        src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?q=80&w=2250&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt="Chakra UI"
+        src="https://images.unsplash.com/photo-1578507065211-1c4e99a5fd24?q=80&w=3570&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt={post.title + " Image"}
       />
       <CardFooter
         justify="space-between"
