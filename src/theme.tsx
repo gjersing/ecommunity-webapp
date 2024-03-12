@@ -30,6 +30,7 @@ const theme = extendTheme({
     },
   },
   colors: {
+    white: "#FAF9F6",
     black: "#16161D",
   },
   fonts,

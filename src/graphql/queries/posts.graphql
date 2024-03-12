@@ -1,8 +1,9 @@
 query Posts {
   posts {
     id
+    authorId
+    body
+    points
     createdAt
-    updatedAt
-    title
   }
 }

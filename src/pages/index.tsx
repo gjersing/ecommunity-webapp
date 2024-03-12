@@ -16,7 +16,7 @@ const Index = () => {
           {!data ? (
             <div key="spinner">Loading...</div>
           ) : (
-            data.posts.map((p) => <PostCard post={p} />)
+            data.posts.toReversed().map((p) => <PostCard post={p} />)
           )}
         </VStack>
       </Container>
