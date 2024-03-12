@@ -23,10 +23,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   } else if (!data?.current_user) {
     navLinks = (
       <>
-        <Link href="/register" as={NextLink} mr={8} color="white">
+        <Link href="/register" as={NextLink} mr={8} color="limegreen">
           Register
         </Link>
-        <Link href="/login" as={NextLink} color="white">
+        <Link href="/login" as={NextLink} color="limegreen">
           Log In
         </Link>
       </>
@@ -38,7 +38,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           href={`/${data.current_user.username}`}
           as={NextLink}
           mr={8}
-          color="white"
+          color="limegreen"
           fontWeight="bold"
         >
           {data.current_user.username}
@@ -49,7 +49,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           }}
           isLoading={logoutFetching}
           variant="link"
-          color="white"
+          color="limegreen"
         >
           Logout
         </Button>
@@ -58,21 +58,30 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   }
 
   return (
-    <Flex bg="darkgreen" p={4} w={"100%"} alignItems="center">
+    // TO DO: Non-sticky NavBar for mobile
+    <Flex
+      py={3}
+      px={5}
+      w={"100%"}
+      alignItems="center"
+      position="sticky"
+      zIndex={1}
+      top={0}
+    >
       <Link
         href="/"
         as={NextLink}
         ml={2}
-        color="white"
+        color="limegreen"
         fontWeight="bold"
         fontSize="x-large"
       >
         <HStack>
-          <Icon as={GiPlantRoots} ml={4} boxSize={8} color="white" />
+          <Icon as={GiPlantRoots} ml={4} boxSize={8} color="limegreen" />
           <Text>ECOmmunity</Text>
         </HStack>
       </Link>
-      <Box ml={"auto"} mr={8} color="white">
+      <Box ml={"auto"} mr={8} color="limegreen">
         {navLinks}
       </Box>
       <Box mr={4} display="inline">
