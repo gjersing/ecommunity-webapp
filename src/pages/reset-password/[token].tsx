@@ -11,7 +11,7 @@ import { useChangePasswordMutation } from "../../graphql/generated/graphql";
 import { useState } from "react";
 import NextLink from "next/link";
 
-export const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
+const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
   const router = useRouter();
   const [, changePassword] = useChangePasswordMutation();
   const [tokenError, setTokenError] = useState("");

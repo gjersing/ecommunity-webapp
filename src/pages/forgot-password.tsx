@@ -7,7 +7,7 @@ import { Formik, Form } from "formik";
 import InputField from "../components/InputField";
 import { useResetPasswordMutation } from "../graphql/generated/graphql";
 
-export const ForgotPassword: React.FC<{}> = ({}) => {
+const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
   const [, resetPassword] = useResetPasswordMutation();
   return (

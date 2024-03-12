@@ -14,7 +14,7 @@ import NextLink from "next/link";
 
 interface loginProps {}
 
-export const Login: React.FC<loginProps> = ({}) => {
+const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
