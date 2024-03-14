@@ -35,7 +35,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     navLinks = (
       <>
         <Link
-          href={`/${data.current_user.username}`}
+          href={`/create-post`}
           as={NextLink}
           mr={8}
           color="limegreen"

@@ -20,7 +20,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
         }}
       >
         {(props) =>
-          complete ? (
+          props.isSubmitting || complete ? (
             <Box>
               Thank you! If an account with that email exists, a link to reset
               the password will be sent.
