@@ -1,4 +1,3 @@
-import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { Alert, AlertTitle, Button, Link } from "@chakra-ui/react";
@@ -11,7 +10,7 @@ import { useChangePasswordMutation } from "../../graphql/generated/graphql";
 import { useState } from "react";
 import NextLink from "next/link";
 
-const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
+const ResetPassword: React.FC = ({}) => {
   const router = useRouter();
   const [, changePassword] = useChangePasswordMutation();
   const [tokenError, setTokenError] = useState("");
@@ -23,7 +22,8 @@ const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
           setTokenError("");
           const response = await changePassword({
             newPassword: values.newPassword,
-            token,
+            token:
+              typeof router.query.token === "string" ? router.query.token : "",
           });
           if (response.data?.changePassword.errors) {
             const errorMap = errorArrayToMap(
@@ -72,12 +72,6 @@ const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
       </Formik>
     </Wrapper>
   );
-};
-
-ResetPassword.getInitialProps = ({ query }) => {
-  return {
-    token: query.token as string,
-  };
 };
 
 export default withUrqlClient(createUrqlClient, { ssr: false })(ResetPassword);

@@ -29,7 +29,11 @@ const Login: React.FC<loginProps> = ({}) => {
               const errorMap = errorArrayToMap(response.data.login.errors);
               actions.setErrors(errorMap);
             } else if (response.data?.login.user) {
-              router.push("/");
+              if (typeof router.query.next === "string") {
+                router.push(router.query.next);
+              } else {
+                router.push("/");
+              }
             }
           }}
         >
