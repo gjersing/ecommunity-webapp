@@ -1,26 +1,19 @@
 import { Button, Flex } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
-import router from "next/router";
-import React, { useEffect } from "react";
-import Wrapper from "../components/Wrapper";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { useRouter } from "next/router";
+import React from "react";
 import { NavBar } from "../components/NavBar";
 import TextAreaField from "../components/TextAreaField";
-import {
-  useCreatePostMutation,
-  useCurrentUserQuery,
-} from "../graphql/generated/graphql";
+import Wrapper from "../components/Wrapper";
+import { useCreatePostMutation } from "../graphql/generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { useIsAuth } from "../utils/useIsAuth";
 
 const CreatePost: React.FC = ({}) => {
-  const [{ data, fetching }] = useCurrentUserQuery();
+  const router = useRouter();
+  useIsAuth();
   const [, createPost] = useCreatePostMutation();
-
-  useEffect(() => {
-    if (!data?.current_user && !fetching) {
-      router.replace("/login");
-    }
-  }, [data, router]);
 
   return (
     <div className="createPost-container">
