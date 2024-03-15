@@ -3,7 +3,7 @@ import { NavBar } from "../components/NavBar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { usePostsQuery } from "../graphql/generated/graphql";
-import { VStack } from "@chakra-ui/react";
+import { VStack, Spinner } from "@chakra-ui/react";
 import { PostCard } from "../components/PostCard";
 
 const Index = () => {
@@ -16,12 +16,8 @@ const Index = () => {
     <>
       <Container height="100%">
         <NavBar />
-        <VStack mt={12} spacing={8} maxW={["80vw", "null", "70vw", "800px"]}>
-          {!data ? (
-            <div key="spinner">Loading...</div>
-          ) : (
-            data.posts.map((p) => <PostCard post={p} />)
-          )}
+        <VStack mt={12} spacing={8} maxW={["80vw", "null", "70vw", "600px"]}>
+          {!data ? <Spinner /> : data.posts.map((p) => <PostCard post={p} />)}
         </VStack>
       </Container>
     </>

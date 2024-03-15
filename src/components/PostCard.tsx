@@ -32,11 +32,11 @@ interface PostCardProps {
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const [seeMore, setSeeMore] = useState(post.body.length > 200);
+  const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
     <CardBody pt={0} pb={4}>
       <Text height={!seeMore ? "auto" : 9}>
-        {!seeMore ? post.body : post.body.slice(0, 175) + "..."}
+        {!seeMore ? post.body : post.body.slice(0, 120) + "..."}
       </Text>
       {seeMore ? (
         <Flex>
