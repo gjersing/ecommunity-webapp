@@ -80,14 +80,7 @@ export type Post = {
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   points: Scalars['Float']['output'];
-  posts: User;
   updatedAt: Scalars['String']['output'];
-};
-
-
-export type PostPostsArgs = {
-  cursor?: InputMaybe<Scalars['String']['input']>;
-  limit: Scalars['Int']['input'];
 };
 
 export type PostInput = {

@@ -14,7 +14,7 @@ import {
   HStack,
   Tooltip,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { BiHeart, BiShare, BiChat } from "react-icons/bi";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -32,8 +32,35 @@ interface PostCardProps {
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+  const [seeMore, setSeeMore] = useState(post.body.length > 200);
+  const cardBody = (
+    <CardBody pt={0} pb={4}>
+      <Text height={!seeMore ? "auto" : 9}>
+        {!seeMore ? post.body : post.body.slice(0, 175) + "..."}
+      </Text>
+      {seeMore ? (
+        <Flex>
+          <Text
+            mt={-3}
+            mr={4}
+            ml="auto"
+            color="gray"
+            onClick={() => {
+              setSeeMore(!seeMore);
+            }}
+          >
+            See More
+          </Text>
+        </Flex>
+      ) : null}
+    </CardBody>
+  );
+
   return (
-    <Card boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 0px 2px 0px">
+    <Card
+      boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 0px 2px 0px"
+      id={post.id.toString()}
+    >
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
@@ -60,9 +87,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           />
         </Flex>
       </CardHeader>
-      <CardBody pt={0} pb={4}>
-        <Text>{post.body}</Text>
-      </CardBody>
+      {cardBody}
       <Image
         objectFit="cover"
         width="800px"
