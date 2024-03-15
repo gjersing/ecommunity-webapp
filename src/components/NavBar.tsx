@@ -75,6 +75,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         color="limegreen"
         fontWeight="bold"
         fontSize="x-large"
+        _hover={{ textDecoration: "none" }}
       >
         <HStack>
           <Icon as={GiPlantRoots} ml={4} boxSize={8} color="limegreen" />

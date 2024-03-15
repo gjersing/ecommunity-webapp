@@ -7,7 +7,11 @@ import { VStack } from "@chakra-ui/react";
 import { PostCard } from "../components/PostCard";
 
 const Index = () => {
-  const [{ data }] = usePostsQuery();
+  const [{ data }] = usePostsQuery({
+    variables: {
+      limit: 10,
+    },
+  });
   return (
     <>
       <Container height="100%">
@@ -16,7 +20,7 @@ const Index = () => {
           {!data ? (
             <div key="spinner">Loading...</div>
           ) : (
-            data.posts.toReversed().map((p) => <PostCard post={p} />)
+            data.posts.map((p) => <PostCard post={p} />)
           )}
         </VStack>
       </Container>
