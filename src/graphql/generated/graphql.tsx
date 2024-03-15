@@ -73,6 +73,12 @@ export type MutationUpdatePostArgs = {
   id: Scalars['Float']['input'];
 };
 
+export type PaginatedPosts = {
+  __typename?: 'PaginatedPosts';
+  hasMore: Scalars['Boolean']['output'];
+  posts: Array<Post>;
+};
+
 export type Post = {
   __typename?: 'Post';
   authorId: Scalars['Float']['output'];
@@ -92,7 +98,7 @@ export type Query = {
   current_user?: Maybe<User>;
   hello: Scalars['String']['output'];
   post?: Maybe<Post>;
-  posts: Array<Post>;
+  posts: PaginatedPosts;
 };
 
 
@@ -186,7 +192,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, authorId: number, body: string, points: number, createdAt: string }> };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, authorId: number, body: string, points: number, createdAt: string }> } };
 
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
@@ -291,11 +297,14 @@ export function useCurrentUserQuery(options?: Omit<Urql.UseQueryArgs<CurrentUser
 export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: String) {
   posts(cursor: $cursor, limit: $limit) {
-    id
-    authorId
-    body
-    points
-    createdAt
+    hasMore
+    posts {
+      id
+      authorId
+      body
+      points
+      createdAt
+    }
   }
 }
     `;

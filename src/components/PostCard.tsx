@@ -69,7 +69,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               <Heading size="sm">Post Author</Heading>
               <HStack>
                 <Text display={"inline"} color="gray">
-                  USA • Time Since Posted •
+                  Time Since Posted •
                 </Text>
                 <Tooltip label="This post is visible to anyone on ECOmmunity">
                   <span>
