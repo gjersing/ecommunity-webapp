@@ -21,7 +21,11 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 interface PostData {
   id: number;
-  authorId: number;
+  author: {
+    id: number;
+    username: string;
+    email: string;
+  };
   body: string;
   points: number;
   createdAt: string;
