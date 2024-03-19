@@ -30,14 +30,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     navLinks = null;
   } else if (!data?.current_user) {
     navLinks = (
-      <>
-        <Link href="/register" as={NextLink} mr={8} color="limegreen">
-          Register
-        </Link>
+      <Flex>
         <Link href="/login" as={NextLink} color="limegreen">
-          Log In
+          <Avatar size="sm" />
         </Link>
-      </>
+      </Flex>
     );
   } else {
     navLinks = (
