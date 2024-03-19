@@ -77,7 +77,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name="Post Author" src="https://bit.ly/sage-adebayo" />
+            <Avatar name={post.author.username} />
             <Box>
               <Heading size="sm">{post.author.username}</Heading>
               <HStack>

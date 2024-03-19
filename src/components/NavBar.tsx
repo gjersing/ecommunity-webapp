@@ -1,4 +1,12 @@
-import { Box, Button, Flex, HStack, Link, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 import {
@@ -33,7 +41,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     );
   } else {
     navLinks = (
-      <>
+      <Flex>
         <Link
           href={`/create-post`}
           as={NextLink}
@@ -41,7 +49,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           color="limegreen"
           fontWeight="bold"
         >
-          {data.current_user.username}
+          <Avatar name={data.current_user.username} size="sm" />
         </Link>
         <Button
           onClick={() => {
@@ -53,7 +61,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         >
           Logout
         </Button>
-      </>
+      </Flex>
     );
   }
 
