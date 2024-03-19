@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import { BiHeart, BiShare, BiChat } from "react-icons/bi";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import moment from "moment";
 
 interface PostData {
   id: number;
@@ -36,6 +37,14 @@ interface PostCardProps {
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+  const createdAtDate = moment(new Date(parseInt(post.createdAt)));
+  const hoursSincePosting = moment().diff(createdAtDate, "hours");
+
+  const postDate =
+    hoursSincePosting > 24 * 5
+      ? createdAtDate.format("D MMM")
+      : createdAtDate.fromNow();
+
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
     <CardBody pt={0} pb={4}>
@@ -70,10 +79,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Avatar name="Post Author" src="https://bit.ly/sage-adebayo" />
             <Box>
-              <Heading size="sm">Post Author</Heading>
+              <Heading size="sm">{post.author.username}</Heading>
               <HStack>
                 <Text display={"inline"} color="gray">
-                  Time Since Posted •
+                  {postDate} •
                 </Text>
                 <Tooltip label="This post is visible to anyone on ECOmmunity">
                   <span>
