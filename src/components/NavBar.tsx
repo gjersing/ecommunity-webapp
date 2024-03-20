@@ -85,8 +85,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   }
 
   return (
-    <Flex
-      py={3}
+    <Box
+      pt={5}
+      pb={3}
       px={5}
       w={"100%"}
       alignItems="center"
@@ -94,33 +95,39 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       zIndex={1}
       top={0}
     >
-      <Link
-        href="/"
-        as={NextLink}
-        ml={2}
-        color="limegreen"
-        fontWeight="bold"
-        fontSize="x-large"
-        _hover={{ textDecoration: "none" }}
+      <Flex
+        mx="auto"
+        alignItems="center"
+        width={["100%", null, null, null, "80%", "1400px"]}
       >
-        <HStack>
-          <IconButton
-            isRound={true}
-            variant="solid"
-            colorScheme="green"
-            aria-label="Done"
-            size="lg"
-            fontSize="36px"
-            icon={<GiPlantRoots />}
-          />
-          <Show breakpoint="(min-width: 1000px)">
-            <Text>ECOmmunity</Text>
-          </Show>
-        </HStack>
-      </Link>
-      <Box ml={"auto"} mr={2} color="limegreen">
-        {navLinks}
-      </Box>
-    </Flex>
+        <Link
+          href="/"
+          as={NextLink}
+          ml={2}
+          color="limegreen"
+          fontWeight="bold"
+          fontSize="x-large"
+          _hover={{ textDecoration: "none" }}
+        >
+          <HStack>
+            <IconButton
+              isRound={true}
+              variant="solid"
+              colorScheme="green"
+              aria-label="Done"
+              size="lg"
+              fontSize="36px"
+              icon={<GiPlantRoots />}
+            />
+            <Show breakpoint="(min-width: 1000px)">
+              <Text>ECOmmunity</Text>
+            </Show>
+          </HStack>
+        </Link>
+        <Box ml={"auto"} mr={2} color="limegreen">
+          {navLinks}
+        </Box>
+      </Flex>
+    </Box>
   );
 };
