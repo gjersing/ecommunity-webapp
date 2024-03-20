@@ -1,10 +1,17 @@
 import {
   Avatar,
   Box,
-  Button,
   Flex,
   HStack,
+  IconButton,
   Link,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  Show,
   Text,
 } from "@chakra-ui/react";
 import React from "react";
@@ -13,15 +20,15 @@ import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from "../graphql/generated/graphql";
-import { Icon } from "@chakra-ui/react";
 import { useIsClient } from "../utils/isClientContext";
-import { DarkModeSwitch } from "./DarkModeSwitch";
 import { GiPlantRoots } from "react-icons/gi";
+import { useRouter } from "next/router";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const isClient = useIsClient();
+  const router = useRouter();
   const [{ data, fetching }] = useCurrentUserQuery({ pause: !isClient });
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
@@ -32,38 +39,52 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     navLinks = (
       <Flex>
         <Link href="/login" as={NextLink} color="limegreen">
-          <Avatar size="sm" />
+          <Avatar size="md" />
         </Link>
       </Flex>
     );
   } else {
     navLinks = (
       <Flex>
-        <Link
-          href={`/create-post`}
-          as={NextLink}
-          mr={8}
-          color="limegreen"
-          fontWeight="bold"
-        >
-          <Avatar name={data.current_user.username} size="sm" />
-        </Link>
-        <Button
-          onClick={() => {
-            logout({});
-          }}
-          isLoading={logoutFetching}
-          variant="link"
-          color="limegreen"
-        >
-          Logout
-        </Button>
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            icon={<Avatar name={data.current_user.username} size="md" />}
+            isRound
+          ></MenuButton>
+          <MenuList>
+            <MenuGroup title={`Hi, ${data.current_user.username}!`}>
+              <MenuDivider />
+              <MenuItem
+                onClick={() => {
+                  router.push(`/${data.current_user?.username}`);
+                }}
+              >
+                Profile
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  router.push("/create-post");
+                }}
+              >
+                Add A Post
+              </MenuItem>
+              <MenuItem
+                disabled={logoutFetching}
+                onClick={() => {
+                  logout({});
+                }}
+              >
+                Logout
+              </MenuItem>
+            </MenuGroup>
+          </MenuList>
+        </Menu>
       </Flex>
     );
   }
 
   return (
-    // TO DO: Non-sticky NavBar for mobile
     <Flex
       py={3}
       px={5}
@@ -83,15 +104,22 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         _hover={{ textDecoration: "none" }}
       >
         <HStack>
-          <Icon as={GiPlantRoots} ml={4} boxSize={8} color="limegreen" />
-          <Text>ECOmmunity</Text>
+          <IconButton
+            isRound={true}
+            variant="solid"
+            colorScheme="green"
+            aria-label="Done"
+            size="lg"
+            fontSize="36px"
+            icon={<GiPlantRoots />}
+          />
+          <Show breakpoint="(min-width: 1000px)">
+            <Text>ECOmmunity</Text>
+          </Show>
         </HStack>
       </Link>
-      <Box ml={"auto"} mr={8} color="limegreen">
+      <Box ml={"auto"} mr={2} color="limegreen">
         {navLinks}
-      </Box>
-      <Box mr={4} display="inline">
-        <DarkModeSwitch />
       </Box>
     </Flex>
   );
