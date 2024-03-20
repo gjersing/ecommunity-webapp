@@ -18,7 +18,7 @@ const CreatePost: React.FC = ({}) => {
   return (
     <div className="createPost-container">
       <NavBar />
-      <Wrapper variant="small">
+      <Wrapper>
         <Formik
           initialValues={{ body: "" }}
           onSubmit={async (values) => {

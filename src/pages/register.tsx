@@ -30,7 +30,7 @@ const Register: React.FC<registerProps> = ({}) => {
   return (
     <Container height="100vh">
       <NavBar />
-      <Wrapper variant="small">
+      <Wrapper>
         <Formik
           initialValues={{ email: "", username: "", password: "" }}
           onSubmit={async (values, actions) => {

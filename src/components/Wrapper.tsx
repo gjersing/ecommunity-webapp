@@ -3,17 +3,13 @@ import React from "react";
 
 interface WrapperProps {
   children: React.ReactNode;
-  variant?: "small" | "regular";
 }
 
-export const Wrapper: React.FC<WrapperProps> = ({
-  children,
-  variant = "regular",
-}) => {
+export const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   return (
     <Box
       mt={8}
-      maxWidth={variant === "regular" ? "80vw" : "50vw"}
+      maxWidth={["90vw", null, null, "70vw", "50vw"]}
       width="100%"
       mx="auto"
       justifyContent={"center"}

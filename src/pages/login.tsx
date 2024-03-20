@@ -30,7 +30,7 @@ const Login: React.FC<loginProps> = ({}) => {
   return (
     <Container height="100vh">
       <NavBar />
-      <Wrapper variant="small">
+      <Wrapper>
         <Formik
           initialValues={{ usernameOrEmail: "", password: "" }}
           onSubmit={async (values, actions) => {
