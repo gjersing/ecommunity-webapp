@@ -13,9 +13,11 @@ import {
   CardFooter,
   HStack,
   Tooltip,
+  Show,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BiHeart, BiShare, BiChat } from "react-icons/bi";
+import { FaHeart } from "react-icons/fa6";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import moment from "moment";
@@ -35,6 +37,11 @@ interface PostData {
 interface PostCardProps {
   post: PostData;
 }
+
+const cardActionSx = {
+  minWidth: "82px",
+  flex: "1",
+};
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const createdAtDate = moment(new Date(parseInt(post.createdAt)));
@@ -74,7 +81,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 0px 2px 0px"
       id={post.id.toString()}
     >
-      <CardHeader>
+      <CardHeader p={[2, 3, 4, 5]} py={[2, 3, 4, 4]}>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Avatar name={post.author.username} />
@@ -112,21 +119,24 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
-        sx={{
-          "& > button": {
-            minW: "136px",
-          },
-        }}
+        px={[2, 3, 4, 5]}
+        py={2}
       >
-        <Button flex="1" variant="ghost" leftIcon={<BiHeart />}>
-          {post.points}
-        </Button>
-        <Button flex="1" variant="ghost" leftIcon={<BiChat />}>
-          Comment
-        </Button>
-        <Button flex="1" variant="ghost" leftIcon={<BiShare />}>
-          Share
-        </Button>
+        <Flex alignItems={"center"} gap={2} ml={2}>
+          <FaHeart color="red" />
+          <Heading size="sm">{post.points}</Heading>
+        </Flex>
+        <Flex gap={[1, 2, null, 3]}>
+          <Button variant="ghost" leftIcon={<BiHeart />} sx={cardActionSx}>
+            Like
+          </Button>
+          <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>
+            <Show breakpoint="(min-width: 844px)">Comment</Show>
+          </Button>
+          <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
+            <Show breakpoint="(min-width: 844px)">Share</Show>
+          </Button>
+        </Flex>
       </CardFooter>
     </Card>
   );

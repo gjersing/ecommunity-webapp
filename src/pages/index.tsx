@@ -46,7 +46,7 @@ const Index = () => {
         mt={12}
         mb={8}
         spacing={8}
-        maxW={["90vw", "null", "80vw", "600px"]}
+        maxW={["100vw", "90vw", "80vw", "600px"]}
       >
         {!data ? (
           <Spinner />
