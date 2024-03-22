@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   HStack,
   IconButton,
@@ -22,6 +23,7 @@ import {
 } from "../graphql/generated/graphql";
 import { useIsClient } from "../utils/isClientContext";
 import { GiPlantRoots } from "react-icons/gi";
+import { FaPlusCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
 
 interface NavBarProps {}
@@ -86,14 +88,15 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   return (
     <Box
-      pt={5}
-      pb={3}
-      px={5}
+      pt={4}
+      pb={2}
+      px={[2, 3, 4, 5]}
       w={"100%"}
       alignItems="center"
       position="sticky"
       zIndex={1}
       top={0}
+      bgColor="white"
     >
       <Flex
         mx="auto"
@@ -124,7 +127,21 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             </Show>
           </HStack>
         </Link>
-        <Box ml={"auto"} mr={2} color="limegreen">
+        <Button
+          rightIcon={<FaPlusCircle color="green " />}
+          maxWidth="600px"
+          position="absolute"
+          left="50%"
+          transform="translate(-50%, 0);"
+          color="green"
+          px={[8, 40, 40, 40, 60]}
+          onClick={() => {
+            router.push("/create-post");
+          }}
+        >
+          Add A Post
+        </Button>
+        <Box ml="auto" mr={2} color="limegreen">
           {navLinks}
         </Box>
       </Flex>

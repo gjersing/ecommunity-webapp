@@ -42,12 +42,7 @@ const Index = () => {
   return (
     <Container height="100%">
       <NavBar />
-      <VStack
-        mt={12}
-        mb={8}
-        spacing={8}
-        maxW={["100vw", "90vw", "80vw", "600px"]}
-      >
+      <VStack my={8} spacing={8} maxW={["100vw", "90vw", "80vw", "600px"]}>
         {!data ? (
           <Spinner />
         ) : (
