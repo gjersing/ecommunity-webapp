@@ -139,7 +139,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             router.push("/create-post");
           }}
         >
-          Add A Post
+          <Show breakpoint="(min-width: 350px)">Add A Post</Show>
         </Button>
         <Box ml="auto" mr={2} color="limegreen">
           {navLinks}

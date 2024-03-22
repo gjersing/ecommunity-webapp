@@ -49,7 +49,7 @@ const Login: React.FC<loginProps> = ({}) => {
         >
           {(props) => (
             <Card
-              p={8}
+              p={[4, null, null, 8]}
               boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 0px 2px 0px"
             >
               <Form>
@@ -59,16 +59,16 @@ const Login: React.FC<loginProps> = ({}) => {
                 <Flex my={2} justifyContent="center">
                   <Text fontSize={"0.75rem"} color="gray">
                     DON'T HAVE AN ACCOUNT?
+                    <Link
+                      href="/register"
+                      as={NextLink}
+                      color="blue"
+                      fontSize={"0.75rem"}
+                      ml={2}
+                    >
+                      SIGN UP
+                    </Link>
                   </Text>
-                  <Link
-                    href="/register"
-                    as={NextLink}
-                    color="blue"
-                    fontSize={"0.75rem"}
-                    ml={2}
-                  >
-                    SIGN UP
-                  </Link>
                 </Flex>
                 <Divider my={2} />
                 <InputField

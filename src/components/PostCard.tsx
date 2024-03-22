@@ -39,7 +39,7 @@ interface PostCardProps {
 }
 
 const cardActionSx = {
-  minWidth: "82px",
+  minWidth: "60px",
   flex: "1",
 };
 
@@ -128,7 +128,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </Flex>
         <Flex gap={[1, 2, null, 3]}>
           <Button variant="ghost" leftIcon={<BiHeart />} sx={cardActionSx}>
-            Like
+            <Show breakpoint="(min-width: 290px)">Like</Show>
           </Button>
           <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Comment</Show>
