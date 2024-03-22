@@ -37,6 +37,13 @@ const theme = extendTheme({
   breakpoints,
   initialColorMode,
   useSystemColorMode,
+  styles: {
+    global: () => ({
+      body: {
+        bg: "#EFEFEF",
+      },
+    }),
+  },
 });
 
 export default theme;

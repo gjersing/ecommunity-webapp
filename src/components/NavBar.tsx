@@ -88,8 +88,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   return (
     <Box
-      pt={4}
-      pb={2}
+      py={3}
       px={[2, 3, 4, 5]}
       w={"100%"}
       alignItems="center"
