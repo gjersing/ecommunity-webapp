@@ -44,13 +44,7 @@ const cardActionSx = {
 };
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const createdAtDate = moment(new Date(parseInt(post.createdAt)));
-  const hoursSincePosting = moment().diff(createdAtDate, "hours");
-
-  const postDate =
-    hoursSincePosting > 24 * 5
-      ? createdAtDate.format("D MMM")
-      : createdAtDate.fromNow();
+  const postDate = moment(new Date(parseInt(post.createdAt))).format("D MMM");
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
