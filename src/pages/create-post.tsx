@@ -1,4 +1,4 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Card, Flex, Heading } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -30,25 +30,33 @@ const CreatePost: React.FC = ({}) => {
           }}
         >
           {(props) => (
-            <Form>
-              <TextAreaField
-                name="body"
-                placeholder="What's on your mind?"
-                label="Post"
-              />
-              <Flex>
-                <Button
-                  mt={4}
-                  ml="auto"
-                  colorScheme="green"
-                  isLoading={props.isSubmitting}
-                  type="submit"
-                  width={28}
-                >
-                  Share Post
-                </Button>
-              </Flex>
-            </Form>
+            <Card
+              p={[4, null, null, 8]}
+              boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 0px 2px 0px"
+            >
+              <Form>
+                <Heading mb={4} size="lg">
+                  Create A Post
+                </Heading>
+                <TextAreaField
+                  name="body"
+                  placeholder="What on 🌎 is going on?"
+                  label=""
+                />
+                <Flex>
+                  <Button
+                    mt={4}
+                    ml="auto"
+                    colorScheme="green"
+                    isLoading={props.isSubmitting}
+                    type="submit"
+                    width={28}
+                  >
+                    Share Post
+                  </Button>
+                </Flex>
+              </Form>
+            </Card>
           )}
         </Formik>
       </Wrapper>
