@@ -44,7 +44,13 @@ const cardActionSx = {
 };
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const postDate = moment(new Date(parseInt(post.createdAt))).format("D MMM");
+  const createdAtDate = moment(new Date(parseInt(post.createdAt)));
+  const hoursSincePosting = moment().diff(createdAtDate, "hours");
+
+  const postDate =
+    hoursSincePosting > 24 * 5
+      ? createdAtDate.format("D MMM")
+      : createdAtDate.fromNow();
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
@@ -82,7 +88,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <Box>
               <Heading size="sm">{post.author.username}</Heading>
               <HStack>
-                <Text display={"inline"} color="gray">
+                <Text display={"inline"} color="gray" suppressHydrationWarning>
                   {postDate} •
                 </Text>
                 <Tooltip label="This post is visible to anyone on ECOmmunity">
