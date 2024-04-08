@@ -21,6 +21,7 @@ import { FaHeart } from "react-icons/fa6";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import moment from "moment";
+import { useLikeMutation } from "../graphql/generated/graphql";
 
 interface PostData {
   id: number;
@@ -51,6 +52,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     hoursSincePosting > 24 * 5
       ? createdAtDate.format("D MMM")
       : createdAtDate.fromNow();
+
+  const [, like] = useLikeMutation();
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
@@ -128,7 +131,14 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <Heading size="sm">{post.points}</Heading>
         </Flex>
         <Flex gap={[1, 2, null, 3]}>
-          <Button variant="ghost" leftIcon={<BiHeart />} sx={cardActionSx}>
+          <Button
+            variant="ghost"
+            leftIcon={<BiHeart />}
+            sx={cardActionSx}
+            onClick={() => {
+              like({ postId: post.id });
+            }}
+          >
             <Show breakpoint="(min-width: 290px)">Like</Show>
           </Button>
           <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>

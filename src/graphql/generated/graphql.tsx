@@ -28,6 +28,7 @@ export type Mutation = {
   changePassword: UserResponse;
   createPost: Post;
   deletePost: Scalars['Boolean']['output'];
+  like: Scalars['Boolean']['output'];
   login: UserResponse;
   logout: Scalars['Boolean']['output'];
   register: UserResponse;
@@ -49,6 +50,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['Float']['input'];
+};
+
+
+export type MutationLikeArgs = {
+  postId: Scalars['Int']['input'];
 };
 
 
@@ -162,6 +168,13 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: boolean };
 
+export type LikeMutationVariables = Exact<{
+  postId: Scalars['Int']['input'];
+}>;
+
+
+export type LikeMutation = { __typename?: 'Mutation', like: boolean };
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -252,6 +265,15 @@ export const ResetPasswordDocument = gql`
 
 export function useResetPasswordMutation() {
   return Urql.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument);
+};
+export const LikeDocument = gql`
+    mutation Like($postId: Int!) {
+  like(postId: $postId)
+}
+    `;
+
+export function useLikeMutation() {
+  return Urql.useMutation<LikeMutation, LikeMutationVariables>(LikeDocument);
 };
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
