@@ -80,6 +80,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     <Card
       boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 0px 2px 0px"
       id={post.id.toString()}
+      bgColor="#FEFEFE"
     >
       <CardHeader p={[2, 3, 4, 5]} py={[2, 3, 4, 4]}>
         <Flex>
