@@ -16,7 +16,8 @@ import {
   Show,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { BiHeart, BiShare, BiChat } from "react-icons/bi";
+import { BiShare, BiChat } from "react-icons/bi";
+import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa6";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -32,6 +33,7 @@ interface PostData {
   };
   body: string;
   points: number;
+  likeStatus?: number | null | undefined;
   createdAt: string;
 }
 
@@ -133,13 +135,17 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <Flex gap={[1, 2, null, 3]}>
           <Button
             variant="ghost"
-            leftIcon={<BiHeart />}
+            leftIcon={
+              post.likeStatus ? <IoHeart color="red" /> : <IoHeartOutline />
+            }
             sx={cardActionSx}
             onClick={() => {
               like({ postId: post.id });
             }}
           >
-            <Show breakpoint="(min-width: 290px)">Like</Show>
+            <Show breakpoint="(min-width: 290px)">
+              <Text color={post.likeStatus ? "red" : "black"}>Like</Text>
+            </Show>
           </Button>
           <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Comment</Show>

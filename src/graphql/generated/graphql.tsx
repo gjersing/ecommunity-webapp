@@ -92,6 +92,7 @@ export type Post = {
   body: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
+  likeStatus?: Maybe<Scalars['Int']['output']>;
   points: Scalars['Float']['output'];
   updatedAt: Scalars['String']['output'];
 };
@@ -206,7 +207,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, body: string, points: number, createdAt: string, author: { __typename?: 'User', id: number, username: string, email: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, body: string, points: number, likeStatus?: number | null, createdAt: string, author: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
@@ -325,6 +326,7 @@ export const PostsDocument = gql`
       id
       body
       points
+      likeStatus
       createdAt
       author {
         id

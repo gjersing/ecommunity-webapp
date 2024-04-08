@@ -1,9 +1,10 @@
 import { Resolver, cacheExchange } from "@urql/exchange-graphcache";
-import { Exchange, fetchExchange, stringifyVariables } from "urql";
+import { Exchange, fetchExchange, gql, stringifyVariables } from "urql";
 import { pipe, tap } from "wonka";
 import {
   CurrentUserDocument,
   CurrentUserQuery,
+  LikeMutationVariables,
   LoginMutation,
   LogoutMutation,
   RegisterMutation,
@@ -76,6 +77,34 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          like: (_res, args, cache, _info) => {
+            const { postId } = args as LikeMutationVariables;
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  points
+                  likeStatus
+                }
+              `,
+              { id: postId } as any
+            );
+            if (data) {
+              const newPoints = data.likeStatus
+                ? (data.points as number) - 1
+                : (data.points as number) + 1;
+              const newStatus = data.likeStatus ? null : 1;
+              cache.writeFragment(
+                gql`
+                  fragment points on Post {
+                    points
+                    likeStatus
+                  }
+                `,
+                { id: postId, points: newPoints, likeStatus: newStatus }
+              );
+            }
+          },
           createPost: (_res, _args, cache, _info) => {
             const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(
