@@ -63,111 +63,119 @@ export const cursorPagination = (): Resolver => {
   };
 };
 
-export const createUrqlClient = (ssrExchange: any) => ({
-  url: "http://localhost:4000/graphql",
-  exchanges: [
-    cacheExchange({
-      keys: {
-        PaginatedPosts: () => null,
-      },
-      resolvers: {
-        Query: {
-          posts: cursorPagination(),
+export const createUrqlClient = (ssrExchange: any, ctx: any) => {
+  let cookie = "";
+  if (typeof window === "undefined") {
+    cookie = ctx?.req?.headers?.cookie;
+  }
+
+  return {
+    url: "http://localhost:4000/graphql",
+    exchanges: [
+      cacheExchange({
+        keys: {
+          PaginatedPosts: () => null,
         },
-      },
-      updates: {
-        Mutation: {
-          like: (_res, args, cache, _info) => {
-            const { postId } = args as LikeMutationVariables;
-            const data = cache.readFragment(
-              gql`
-                fragment _ on Post {
-                  id
-                  points
-                  likeStatus
-                }
-              `,
-              { id: postId } as any
-            );
-            if (data) {
-              const newPoints = data.likeStatus
-                ? (data.points as number) - 1
-                : (data.points as number) + 1;
-              const newStatus = data.likeStatus ? null : 1;
-              cache.writeFragment(
+        resolvers: {
+          Query: {
+            posts: cursorPagination(),
+          },
+        },
+        updates: {
+          Mutation: {
+            like: (_res, args, cache, _info) => {
+              const { postId } = args as LikeMutationVariables;
+              const data = cache.readFragment(
                 gql`
-                  fragment points on Post {
+                  fragment _ on Post {
+                    id
                     points
                     likeStatus
                   }
                 `,
-                { id: postId, points: newPoints, likeStatus: newStatus }
+                { id: postId } as any
               );
-            }
-          },
-          createPost: (_res, _args, cache, _info) => {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (info) => info.fieldName === "posts"
-            );
-            fieldInfos.forEach((fi) => {
-              cache.invalidate("Query", "posts", fi.arguments);
-            });
-          },
-          logout: (res, _args, cache, _info) => {
-            typedUpdateQuery<LogoutMutation, CurrentUserQuery>(
-              cache,
-              {
-                query: CurrentUserDocument,
-              },
-              res,
-              () => ({ current_user: null })
-            );
-          },
-          login: (res, _args, cache, _info) => {
-            typedUpdateQuery<LoginMutation, CurrentUserQuery>(
-              cache,
-              {
-                query: CurrentUserDocument,
-              },
-              res,
-              (result, query) => {
-                if (result.login.errors) {
-                  return query;
-                } else {
-                  return {
-                    current_user: result.login.user,
-                  };
-                }
+              if (data) {
+                const newPoints = data.likeStatus
+                  ? (data.points as number) - 1
+                  : (data.points as number) + 1;
+                const newStatus = data.likeStatus ? null : 1;
+                cache.writeFragment(
+                  gql`
+                    fragment points on Post {
+                      points
+                      likeStatus
+                    }
+                  `,
+                  { id: postId, points: newPoints, likeStatus: newStatus }
+                );
               }
-            );
-          },
-          register: (res, _args, cache, _info) => {
-            typedUpdateQuery<RegisterMutation, CurrentUserQuery>(
-              cache,
-              {
-                query: CurrentUserDocument,
-              },
-              res,
-              (result, query) => {
-                if (result.register.errors) {
-                  return query;
-                } else {
-                  return {
-                    current_user: result.register.user,
-                  };
+            },
+            createPost: (_res, _args, cache, _info) => {
+              const allFields = cache.inspectFields("Query");
+              const fieldInfos = allFields.filter(
+                (info) => info.fieldName === "posts"
+              );
+              fieldInfos.forEach((fi) => {
+                cache.invalidate("Query", "posts", fi.arguments);
+              });
+            },
+            logout: (res, _args, cache, _info) => {
+              typedUpdateQuery<LogoutMutation, CurrentUserQuery>(
+                cache,
+                {
+                  query: CurrentUserDocument,
+                },
+                res,
+                () => ({ current_user: null })
+              );
+            },
+            login: (res, _args, cache, _info) => {
+              typedUpdateQuery<LoginMutation, CurrentUserQuery>(
+                cache,
+                {
+                  query: CurrentUserDocument,
+                },
+                res,
+                (result, query) => {
+                  if (result.login.errors) {
+                    return query;
+                  } else {
+                    return {
+                      current_user: result.login.user,
+                    };
+                  }
                 }
-              }
-            );
+              );
+            },
+            register: (res, _args, cache, _info) => {
+              typedUpdateQuery<RegisterMutation, CurrentUserQuery>(
+                cache,
+                {
+                  query: CurrentUserDocument,
+                },
+                res,
+                (result, query) => {
+                  if (result.register.errors) {
+                    return query;
+                  } else {
+                    return {
+                      current_user: result.register.user,
+                    };
+                  }
+                }
+              );
+            },
           },
         },
-      },
-    }),
-    errorExchange,
-    ssrExchange,
-    fetchExchange,
-  ],
-  fetchOptions: {
-    credentials: "include" as const,
-  },
-});
+      }),
+      errorExchange,
+      ssrExchange,
+      fetchExchange,
+    ],
+    fetchOptions: {
+      credentials: "include" as const,
+      headers: cookie ? { cookie } : undefined,
+    },
+  };
+};

@@ -32,6 +32,6 @@ export const IsMobileContextProvider = ({ children }: ChildProps) => {
   );
 };
 
-export function useIsClient() {
+export function useIsMobile() {
   return useContext(IsMobileContext);
 }
