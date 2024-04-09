@@ -18,10 +18,18 @@ import {
   Menu,
   MenuItem,
   MenuList,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Textarea,
 } from "@chakra-ui/react";
-import { LuTrash2 } from "react-icons/lu";
+import { LuTrash2, LuPencil } from "react-icons/lu";
 import { FaRegFlag } from "react-icons/fa6";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { BiShare, BiChat } from "react-icons/bi";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa6";
@@ -32,6 +40,7 @@ import {
   useCurrentUserQuery,
   useDeletePostMutation,
   useLikeMutation,
+  useUpdatePostMutation,
 } from "../graphql/generated/graphql";
 import NextLink from "next/link";
 
@@ -58,6 +67,15 @@ const cardActionSx = {
 };
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+  const [editBody, setEditBody] = React.useState(post.body);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
   const createdAtDate = moment(new Date(parseInt(post.createdAt)));
   const hoursSincePosting = moment().diff(createdAtDate, "hours");
 
@@ -68,7 +86,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   const [, like] = useLikeMutation();
   const [, deletePost] = useDeletePostMutation();
+  const [, updatePost] = useUpdatePostMutation();
   const [{ data: userData }] = useCurrentUserQuery();
+
+  const handleEditChange = (e: any) => {
+    setEditBody(e.target.value);
+  };
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
@@ -127,9 +150,18 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               aria-label="See menu"
             />
             <MenuList>
+              {post.author.id === userData?.current_user?.id ? (
+                <MenuItem
+                  icon={<LuPencil />}
+                  aria-label="Edit Post"
+                  onClick={onOpen}
+                >
+                  Edit Post
+                </MenuItem>
+              ) : null}
               <MenuItem
                 icon={<FaRegFlag />}
-                aria-abel="Report Post"
+                aria-label="Report Post"
                 onClick={() => {}}
               >
                 Report Post
@@ -137,10 +169,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               {post.author.id === userData?.current_user?.id ? (
                 <MenuItem
                   icon={<LuTrash2 />}
-                  aria-abel="Delete Post"
-                  onClick={() => {
-                    deletePost({ id: post.id });
-                  }}
+                  aria-label="Delete Post"
+                  onClick={onDeleteOpen}
                 >
                   Delete Post
                 </MenuItem>
@@ -193,6 +223,73 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </Button>
         </Flex>
       </CardFooter>
+      <AlertDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Edit Post
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              <Textarea
+                value={editBody}
+                onChange={handleEditChange}
+                placeholder={post.body}
+              />
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="green"
+                onClick={() => {
+                  updatePost({ id: post.id, body: editBody });
+                  onClose();
+                }}
+                ml={3}
+              >
+                Update
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        leastDestructiveRef={cancelRef}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Post
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onDeleteClose}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={() => {
+                  deletePost({ id: post.id });
+                  onDeleteClose();
+                }}
+                ml={3}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Card>
   );
 };
