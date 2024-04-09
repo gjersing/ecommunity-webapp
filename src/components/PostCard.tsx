@@ -14,7 +14,13 @@ import {
   HStack,
   Tooltip,
   Show,
+  MenuButton,
+  Menu,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
+import { LuTrash2 } from "react-icons/lu";
+import { FaRegFlag } from "react-icons/fa6";
 import React, { useState } from "react";
 import { BiShare, BiChat } from "react-icons/bi";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
@@ -22,7 +28,11 @@ import { FaHeart } from "react-icons/fa6";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import moment from "moment";
-import { useLikeMutation } from "../graphql/generated/graphql";
+import {
+  useCurrentUserQuery,
+  useDeletePostMutation,
+  useLikeMutation,
+} from "../graphql/generated/graphql";
 import NextLink from "next/link";
 
 interface PostData {
@@ -57,6 +67,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       : createdAtDate.fromNow();
 
   const [, like] = useLikeMutation();
+  const [, deletePost] = useDeletePostMutation();
+  const [{ data: userData }] = useCurrentUserQuery();
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
@@ -106,12 +118,35 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               </HStack>
             </Box>
           </Flex>
-          <IconButton
-            variant="ghost"
-            colorScheme="gray"
-            aria-label="See menu"
-            icon={<BsThreeDotsVertical />}
-          />
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<BsThreeDotsVertical />}
+              variant="ghost"
+              colorScheme="gray"
+              aria-label="See menu"
+            />
+            <MenuList>
+              <MenuItem
+                icon={<FaRegFlag />}
+                aria-abel="Report Post"
+                onClick={() => {}}
+              >
+                Report Post
+              </MenuItem>
+              {post.author.id === userData?.current_user?.id ? (
+                <MenuItem
+                  icon={<LuTrash2 />}
+                  aria-abel="Delete Post"
+                  onClick={() => {
+                    deletePost({ id: post.id });
+                  }}
+                >
+                  Delete Post
+                </MenuItem>
+              ) : null}
+            </MenuList>
+          </Menu>
         </Flex>
       </CardHeader>
       {cardBody}

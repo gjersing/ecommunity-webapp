@@ -46,7 +46,9 @@ const Index = () => {
         {!data ? (
           <Spinner />
         ) : (
-          data.posts.posts.map((p) => <PostCard post={p} key={p.id} />)
+          data.posts.posts.map((p) =>
+            !p ? null : <PostCard post={p} key={p.id} />
+          )
         )}
         {fetching && data?.posts.hasMore ? <Spinner /> : null}
       </VStack>
