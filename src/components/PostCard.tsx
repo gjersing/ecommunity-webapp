@@ -23,6 +23,7 @@ import { PiGlobeSimpleThin } from "react-icons/pi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import moment from "moment";
 import { useLikeMutation } from "../graphql/generated/graphql";
+import NextLink from "next/link";
 
 interface PostData {
   id: number;
@@ -114,14 +115,16 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </Flex>
       </CardHeader>
       {cardBody}
-      <Image
-        objectFit="cover"
-        width="800px"
-        maxHeight={["350px", "425px", "500px", "580px"]}
-        objectPosition="center"
-        src="https://us1-photo.nextdoor.com/post_photos/4b/ed/4bed03ee10cb58fd2b3d11e684302d87.jpeg?request_version=v2&output_type=jpeg&sizing=linear"
-        alt={post.id + " Image"}
-      />
+      <NextLink href="/post[id]" as={`/post/${post.id}`}>
+        <Image
+          objectFit="cover"
+          width="800px"
+          maxHeight={["350px", "425px", "500px", "580px"]}
+          objectPosition="center"
+          src="https://us1-photo.nextdoor.com/post_photos/4b/ed/4bed03ee10cb58fd2b3d11e684302d87.jpeg?request_version=v2&output_type=jpeg&sizing=linear"
+          alt={post.id + " Image"}
+        />
+      </NextLink>
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
