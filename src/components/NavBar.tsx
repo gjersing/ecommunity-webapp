@@ -21,7 +21,6 @@ import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from "../graphql/generated/graphql";
-import { useIsClient } from "../utils/isClientContext";
 import { GiPlantRoots } from "react-icons/gi";
 import { FaPlusCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
@@ -29,9 +28,8 @@ import { useRouter } from "next/router";
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
-  const isClient = useIsClient();
   const router = useRouter();
-  const [{ data, fetching }] = useCurrentUserQuery({ pause: !isClient });
+  const [{ data, fetching }] = useCurrentUserQuery();
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
   let navLinks = null;
