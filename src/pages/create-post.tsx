@@ -22,7 +22,7 @@ const CreatePost: React.FC = ({}) => {
         <Formik
           initialValues={{ body: "" }}
           onSubmit={async (values) => {
-            // TO DO: Validate user inputs against obscenity filter
+            // TO DO: Validate user inputs against obscenity filter & limit to 280 characters (200 for comments?)
             const { error } = await createPost({ input: values });
             if (!error) {
               router.push("/");

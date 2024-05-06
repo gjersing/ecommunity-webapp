@@ -1,4 +1,7 @@
 {
+  "name": "ecommunity-webapp",
+  "version": "0.5.0",
+  "description": "Social Media For Nature Lovers",
   "private": true,
   "scripts": {
     "dev": "next",

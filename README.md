@@ -1,5 +1,9 @@
-ECOmmunity - The Neighborhood Nature App
+ECOmmunity - Social Media For Nature Lovers
 
 This repository contains the frontend UI logic for the application.
 
 Tech: React, Typescript, Nextjs, Chakra
+
+<img width="1751" alt="Screenshot 2024-04-08 at 10 46 05 AM" src="https://github.com/gjersing/ecommunity/assets/50156286/a5d2f649-5aca-433e-8f8d-026dce7cdb68">
+
+<img width="372" alt="Screenshot 2024-04-08 at 10 34 13 AM" src="https://github.com/gjersing/ecommunity/assets/50156286/74ded91d-9c3b-4973-8683-8ae4f60feb91">
