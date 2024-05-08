@@ -1,4 +1,4 @@
-import { Resolver, cacheExchange } from "@urql/exchange-graphcache";
+import { Cache, Resolver, cacheExchange } from "@urql/exchange-graphcache";
 import { Exchange, fetchExchange, gql, stringifyVariables } from "urql";
 import { pipe, tap } from "wonka";
 import {
@@ -64,6 +64,14 @@ export const cursorPagination = (): Resolver => {
   };
 };
 
+const invalidateAllPosts = (cache: Cache) => {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "posts", fi.arguments);
+  });
+};
+
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
   let cookie = "";
   if (typeof window === "undefined") {
@@ -119,13 +127,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
               }
             },
             createPost: (_res, _args, cache, _info) => {
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "posts"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "posts", fi.arguments);
-              });
+              invalidateAllPosts(cache);
             },
             logout: (res, _args, cache, _info) => {
               typedUpdateQuery<LogoutMutation, CurrentUserQuery>(
@@ -154,6 +156,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   }
                 }
               );
+              invalidateAllPosts(cache);
             },
             register: (res, _args, cache, _info) => {
               typedUpdateQuery<RegisterMutation, CurrentUserQuery>(

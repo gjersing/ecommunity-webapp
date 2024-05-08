@@ -71,8 +71,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               </MenuItem>
               <MenuItem
                 disabled={logoutFetching}
-                onClick={() => {
-                  logout({});
+                onClick={async () => {
+                  await logout({});
+                  router.reload();
                 }}
               >
                 Logout
