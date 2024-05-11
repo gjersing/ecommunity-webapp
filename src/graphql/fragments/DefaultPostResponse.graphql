@@ -1,0 +1,8 @@
+fragment DefaultPostResponse on PostResponse {
+  errors {
+    ...RegularError
+  }
+  post {
+    ...DefaultPost
+  }
+}

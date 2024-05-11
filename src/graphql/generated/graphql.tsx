@@ -26,7 +26,7 @@ export type FieldError = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
-  createPost: Post;
+  createPost: PostResponse;
   deletePost: Scalars['Boolean']['output'];
   like: Scalars['Boolean']['output'];
   login: UserResponse;
@@ -101,6 +101,12 @@ export type PostInput = {
   body: Scalars['String']['input'];
 };
 
+export type PostResponse = {
+  __typename?: 'PostResponse';
+  errors?: Maybe<Array<FieldError>>;
+  post?: Maybe<Post>;
+};
+
 export type Query = {
   __typename?: 'Query';
   current_user?: Maybe<User>;
@@ -141,6 +147,10 @@ export type UsernamePasswordInput = {
   username: Scalars['String']['input'];
 };
 
+export type DefaultPostFragment = { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string };
+
+export type DefaultPostResponseFragment = { __typename?: 'PostResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, post?: { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string } | null };
+
 export type DefaultUserFragment = { __typename?: 'User', id: number, username: string };
 
 export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string } | null };
@@ -160,7 +170,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, post?: { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string } | null } };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -237,6 +247,26 @@ export const RegularErrorFragmentDoc = gql`
   message
 }
     `;
+export const DefaultPostFragmentDoc = gql`
+    fragment DefaultPost on Post {
+  id
+  body
+  points
+  authorId
+  createdAt
+}
+    `;
+export const DefaultPostResponseFragmentDoc = gql`
+    fragment DefaultPostResponse on PostResponse {
+  errors {
+    ...RegularError
+  }
+  post {
+    ...DefaultPost
+  }
+}
+    ${RegularErrorFragmentDoc}
+${DefaultPostFragmentDoc}`;
 export const DefaultUserFragmentDoc = gql`
     fragment DefaultUser on User {
   id
@@ -268,14 +298,10 @@ export function useChangePasswordMutation() {
 export const CreatePostDocument = gql`
     mutation CreatePost($input: PostInput!) {
   createPost(input: $input) {
-    id
-    body
-    points
-    authorId
-    createdAt
+    ...DefaultPostResponse
   }
 }
-    `;
+    ${DefaultPostResponseFragmentDoc}`;
 
 export function useCreatePostMutation() {
   return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument);

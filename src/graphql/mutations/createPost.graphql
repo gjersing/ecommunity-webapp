@@ -1,9 +1,5 @@
 mutation CreatePost($input: PostInput!) {
   createPost(input: $input) {
-    id
-    body
-    points
-    authorId
-    createdAt
+    ...DefaultPostResponse
   }
 }

@@ -1,0 +1,7 @@
+fragment DefaultPost on Post {
+  id
+  body
+  points
+  authorId
+  createdAt
+}
