@@ -131,7 +131,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       >
         <Flex alignItems={"center"} gap={2} ml={2}>
           <FaHeart color="red" />
-          <Heading size="sm">{post.points}</Heading>
+          <Heading size="sm" color={post.likeStatus ? "red" : "black"}>
+            {post.points}
+          </Heading>
         </Flex>
         <Flex gap={[1, 2, null, 3]}>
           <Button
