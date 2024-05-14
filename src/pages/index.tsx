@@ -12,9 +12,14 @@ const Index = () => {
     limit: 10,
     cursor: null as null | string,
   });
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
+
+  // TO DO: Remove for v1.0
+  if (!fetching && error) {
+    return <div>Something went wrong. Error: {error.message}</div>;
+  }
 
   useEffect(() => {
     const handleScroll = () => {
