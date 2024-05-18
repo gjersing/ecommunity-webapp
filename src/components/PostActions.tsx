@@ -48,6 +48,9 @@ export const PostActions: React.FC<PostActionsProps> = ({
   const [, updatePost] = useUpdatePostMutation();
   const [{ data: userData }] = useCurrentUserQuery();
 
+  const userId = userData?.current_user?.id;
+  const validUser = authorId === userId || userId === 1;
+
   const handleEditChange = (e: any) => {
     setEditBody(e.target.value);
   };
@@ -62,7 +65,7 @@ export const PostActions: React.FC<PostActionsProps> = ({
         aria-label="See menu"
       />
       <MenuList>
-        {authorId === userData?.current_user?.id ? (
+        {validUser ? (
           <MenuItem icon={<LuPencil />} aria-label="Edit Post" onClick={onOpen}>
             Edit Post
           </MenuItem>
@@ -74,7 +77,7 @@ export const PostActions: React.FC<PostActionsProps> = ({
         >
           Report Post
         </MenuItem>
-        {authorId === userData?.current_user?.id ? (
+        {validUser ? (
           <MenuItem
             icon={<LuTrash2 />}
             aria-label="Delete Post"
