@@ -1,23 +1,20 @@
 import { Container } from "../components/Container";
 import { NavBar } from "../components/NavBar";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import { usePostsQuery } from "../graphql/generated/graphql";
+import { PostsQuery, usePostsQuery } from "../graphql/generated/graphql";
 import { VStack, Spinner } from "@chakra-ui/react";
 import { PostCard } from "../components/PostCard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Index = () => {
-  const [variables, setVariables] = useState({
-    limit: 10,
-    cursor: null as null | string,
-  });
-  const [{ data, error, fetching }] = usePostsQuery({
-    variables,
+  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+    variables: {
+      limit: 10,
+      cursor: null,
+    },
   });
 
   // TO DO: Remove for v1.0
-  if (!fetching && error) {
+  if (!loading && error) {
     return <div>Something went wrong. Error: {error.message}</div>;
   }
 
@@ -29,11 +26,30 @@ const Index = () => {
         scrollTop + clientHeight >= scrollHeight - 20 &&
         data?.posts.hasMore
       ) {
-        setVariables({
-          limit: variables.limit,
-          cursor: data
-            ? data.posts.posts[data.posts.posts.length - 1].createdAt
-            : null,
+        fetchMore({
+          variables: {
+            limit: variables?.limit,
+            cursor: data
+              ? data.posts.posts[data.posts.posts.length - 1].createdAt
+              : null,
+          },
+          updateQuery: (previousValue, { fetchMoreResult }): PostsQuery => {
+            if (!fetchMoreResult) {
+              return previousValue;
+            }
+
+            return {
+              __typename: "Query",
+              posts: {
+                __typename: "PaginatedPosts",
+                hasMore: fetchMoreResult.posts.hasMore,
+                posts: [
+                  ...previousValue.posts.posts,
+                  ...fetchMoreResult.posts.posts,
+                ],
+              },
+            };
+          },
         });
       }
     };
@@ -55,10 +71,10 @@ const Index = () => {
             !p ? null : <PostCard post={p} key={p.id} />
           )
         )}
-        {fetching && data?.posts.hasMore ? <Spinner /> : null}
+        {loading && data?.posts.hasMore ? <Spinner /> : null}
       </VStack>
     </Container>
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default Index;

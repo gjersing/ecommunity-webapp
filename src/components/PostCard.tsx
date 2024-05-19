@@ -55,7 +55,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       ? createdAtDate.format("D MMM")
       : createdAtDate.fromNow();
 
-  const [, like] = useLikeMutation();
+  const [like] = useLikeMutation();
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
@@ -143,7 +143,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             }
             sx={cardActionSx}
             onClick={() => {
-              like({ postId: post.id });
+              like({ variables: { postId: post.id } });
             }}
           >
             <Show breakpoint="(min-width: 290px)">

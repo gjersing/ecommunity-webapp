@@ -18,15 +18,13 @@ import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
 import { Container } from "../components/Container";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from "next/link";
 
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   return (
     <Container height="100vh">
       <NavBar />
@@ -34,7 +32,7 @@ const Register: React.FC<registerProps> = ({}) => {
         <Formik
           initialValues={{ email: "", username: "", password: "" }}
           onSubmit={async (values, actions) => {
-            const response = await register({ options: values });
+            const response = await register({ variables: { options: values } });
             if (response.data?.register.errors) {
               const errorMap = errorArrayToMap(response.data.register.errors);
               actions.setErrors(errorMap);
@@ -100,4 +98,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Register);
+export default Register;

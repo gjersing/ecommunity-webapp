@@ -24,16 +24,18 @@ import {
 import { GiPlantRoots } from "react-icons/gi";
 import { FaPlusCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { useApolloClient } from "@apollo/client";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const router = useRouter();
-  const [{ data, fetching }] = useCurrentUserQuery();
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
+  const { data, loading } = useCurrentUserQuery();
+  const [logout, { loading: logoutloading }] = useLogoutMutation();
+  const apolloClient = useApolloClient();
 
   let navLinks = null;
-  if (fetching) {
+  if (loading) {
     navLinks = null;
   } else if (!data?.current_user) {
     navLinks = (
@@ -70,10 +72,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                 Add A Post
               </MenuItem>
               <MenuItem
-                disabled={logoutFetching}
+                disabled={logoutloading}
                 onClick={async () => {
                   await logout({});
-                  router.reload();
+                  await apolloClient.resetStore();
                 }}
               >
                 Logout

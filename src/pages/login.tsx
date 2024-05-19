@@ -18,15 +18,13 @@ import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
 import { Container } from "../components/Container";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from "next/link";
 
 interface loginProps {}
 
 const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
-  const [, login] = useLoginMutation();
+  const [login] = useLoginMutation();
   return (
     <Container height="100vh">
       <NavBar />
@@ -34,7 +32,7 @@ const Login: React.FC<loginProps> = ({}) => {
         <Formik
           initialValues={{ usernameOrEmail: "", password: "" }}
           onSubmit={async (values, actions) => {
-            const response = await login(values);
+            const response = await login({ variables: values });
             if (response.data?.login.errors) {
               const errorMap = errorArrayToMap(response.data.login.errors);
               actions.setErrors(errorMap);
@@ -113,4 +111,4 @@ const Login: React.FC<loginProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default Login;

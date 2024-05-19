@@ -1,20 +1,18 @@
 import { Button, Card, Flex, Heading } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { NavBar } from "../components/NavBar";
 import TextAreaField from "../components/TextAreaField";
 import Wrapper from "../components/Wrapper";
 import { useCreatePostMutation } from "../graphql/generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import { useIsAuth } from "../utils/useIsAuth";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
 
 const CreatePost: React.FC = ({}) => {
   const router = useRouter();
   useIsAuth();
-  const [, createPost] = useCreatePostMutation();
+  const [createPost] = useCreatePostMutation();
 
   return (
     <div className="createPost-container">
@@ -23,9 +21,11 @@ const CreatePost: React.FC = ({}) => {
         <Formik
           initialValues={{ body: "" }}
           onSubmit={async (values, actions) => {
-            const response = await createPost({ input: values });
+            const response = await createPost({ variables: { input: values } });
             if (response.data?.createPost.errors) {
-              const errorMap = errorArrayToMap(response.data.createPost.errors);
+              const errorMap = errorArrayToMap(
+                response.data?.createPost.errors
+              );
               actions.setErrors(errorMap);
             }
             if (!response.data?.createPost.errors) {
@@ -68,4 +68,4 @@ const CreatePost: React.FC = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(CreatePost);
+export default CreatePost;

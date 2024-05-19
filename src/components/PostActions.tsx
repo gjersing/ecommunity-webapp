@@ -44,9 +44,9 @@ export const PostActions: React.FC<PostActionsProps> = ({
   } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
-  const [, deletePost] = useDeletePostMutation();
-  const [, updatePost] = useUpdatePostMutation();
-  const [{ data: userData }] = useCurrentUserQuery();
+  const [deletePost] = useDeletePostMutation();
+  const [updatePost] = useUpdatePostMutation();
+  const { data: userData } = useCurrentUserQuery();
 
   const userId = userData?.current_user?.id;
   const validUser = authorId === userId || userId === 1;
@@ -111,7 +111,7 @@ export const PostActions: React.FC<PostActionsProps> = ({
               <Button
                 colorScheme="green"
                 onClick={() => {
-                  updatePost({ id: postId, body: editBody });
+                  updatePost({ variables: { id: postId, body: editBody } });
                   onClose();
                 }}
                 ml={3}
@@ -143,7 +143,7 @@ export const PostActions: React.FC<PostActionsProps> = ({
               <Button
                 colorScheme="red"
                 onClick={() => {
-                  deletePost({ id: postId });
+                  deletePost({ variables: { id: postId } });
                   onDeleteClose();
                 }}
                 ml={3}
