@@ -7,6 +7,7 @@ import { errorArrayToMap } from "../../utils/errorArrayToMap";
 import { useChangePasswordMutation } from "../../graphql/generated/graphql";
 import { useState } from "react";
 import NextLink from "next/link";
+import { withApollo } from "../../utils/withApollo";
 
 const ResetPassword: React.FC = ({}) => {
   const router = useRouter();
@@ -76,4 +77,4 @@ const ResetPassword: React.FC = ({}) => {
   );
 };
 
-export default ResetPassword;
+export default withApollo({ ssr: false })(ResetPassword);

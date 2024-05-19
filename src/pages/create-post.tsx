@@ -8,6 +8,7 @@ import Wrapper from "../components/Wrapper";
 import { useCreatePostMutation } from "../graphql/generated/graphql";
 import { useIsAuth } from "../utils/useIsAuth";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
+import { withApollo } from "../utils/withApollo";
 
 const CreatePost: React.FC = ({}) => {
   const router = useRouter();
@@ -68,4 +69,4 @@ const CreatePost: React.FC = ({}) => {
   );
 };
 
-export default CreatePost;
+export default withApollo({ ssr: false })(CreatePost);

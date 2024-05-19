@@ -5,6 +5,7 @@ import Wrapper from "../../components/Wrapper";
 import { PostCard } from "../../components/PostCard";
 import { Box, Heading, Text, Spinner, Center } from "@chakra-ui/react";
 import { NavBar } from "../../components/NavBar";
+import { withApollo } from "../../utils/withApollo";
 
 const Post = ({}) => {
   const router = useRouter();
@@ -52,4 +53,4 @@ const Post = ({}) => {
   );
 };
 
-export default Post;
+export default withApollo({ ssr: true })(Post);

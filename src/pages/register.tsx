@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
 import { Container } from "../components/Container";
 import NextLink from "next/link";
+import { withApollo } from "../utils/withApollo";
 
 interface registerProps {}
 
@@ -98,4 +99,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+export default withApollo({ ssr: false })(Register);

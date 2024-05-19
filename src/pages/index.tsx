@@ -4,6 +4,7 @@ import { usePostsQuery } from "../graphql/generated/graphql";
 import { VStack, Spinner } from "@chakra-ui/react";
 import { PostCard } from "../components/PostCard";
 import { useEffect } from "react";
+import { withApollo } from "../utils/withApollo";
 
 const Index = () => {
   const { data, error, loading, fetchMore, variables } = usePostsQuery({
@@ -61,4 +62,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withApollo({ ssr: true })(Index);

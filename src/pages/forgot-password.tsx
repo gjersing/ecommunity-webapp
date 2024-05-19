@@ -5,6 +5,7 @@ import { Formik, Form } from "formik";
 import InputField from "../components/InputField";
 import { useResetPasswordMutation } from "../graphql/generated/graphql";
 import { NavBar } from "../components/NavBar";
+import { withApollo } from "../utils/withApollo";
 
 const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
@@ -57,4 +58,4 @@ const ForgotPassword: React.FC<{}> = ({}) => {
   );
 };
 
-export default ForgotPassword;
+export default withApollo({ ssr: false })(ForgotPassword);
