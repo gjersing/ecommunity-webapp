@@ -22,7 +22,12 @@ const CreatePost: React.FC = ({}) => {
         <Formik
           initialValues={{ body: "" }}
           onSubmit={async (values, actions) => {
-            const response = await createPost({ variables: { input: values } });
+            const response = await createPost({
+              variables: { input: values },
+              update: (cache) => {
+                cache.evict({ fieldName: "posts" });
+              },
+            });
             if (response.data?.createPost.errors) {
               const errorMap = errorArrayToMap(
                 response.data?.createPost.errors

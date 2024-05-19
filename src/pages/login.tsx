@@ -13,7 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
-import { useLoginMutation } from "../graphql/generated/graphql";
+import {
+  CurrentUserDocument,
+  CurrentUserQuery,
+  useLoginMutation,
+} from "../graphql/generated/graphql";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
@@ -33,7 +37,19 @@ const Login: React.FC<loginProps> = ({}) => {
         <Formik
           initialValues={{ usernameOrEmail: "", password: "" }}
           onSubmit={async (values, actions) => {
-            const response = await login({ variables: values });
+            const response = await login({
+              variables: values,
+              update: (cache, { data }) => {
+                cache.writeQuery<CurrentUserQuery>({
+                  query: CurrentUserDocument,
+                  data: {
+                    __typename: "Query",
+                    current_user: data?.login.user,
+                  },
+                });
+                cache.evict({ fieldName: "posts" });
+              },
+            });
             if (response.data?.login.errors) {
               const errorMap = errorArrayToMap(response.data.login.errors);
               actions.setErrors(errorMap);

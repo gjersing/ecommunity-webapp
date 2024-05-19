@@ -13,7 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
-import { useRegisterMutation } from "../graphql/generated/graphql";
+import {
+  CurrentUserDocument,
+  CurrentUserQuery,
+  useRegisterMutation,
+} from "../graphql/generated/graphql";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { useRouter } from "next/router";
 import { NavBar } from "../components/NavBar";
@@ -33,7 +37,18 @@ const Register: React.FC<registerProps> = ({}) => {
         <Formik
           initialValues={{ email: "", username: "", password: "" }}
           onSubmit={async (values, actions) => {
-            const response = await register({ variables: { options: values } });
+            const response = await register({
+              variables: { options: values },
+              update: (cache, { data }) => {
+                cache.writeQuery<CurrentUserQuery>({
+                  query: CurrentUserDocument,
+                  data: {
+                    __typename: "Query",
+                    current_user: data?.register.user,
+                  },
+                });
+              },
+            });
             if (response.data?.register.errors) {
               const errorMap = errorArrayToMap(response.data.register.errors);
               actions.setErrors(errorMap);

@@ -143,7 +143,12 @@ export const PostActions: React.FC<PostActionsProps> = ({
               <Button
                 colorScheme="red"
                 onClick={() => {
-                  deletePost({ variables: { id: postId } });
+                  deletePost({
+                    variables: { id: postId },
+                    update: (cache) => {
+                      cache.evict({ id: "Post:" + postId });
+                    },
+                  });
                   onDeleteClose();
                 }}
                 ml={3}

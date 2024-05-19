@@ -4,7 +4,11 @@ import { useRouter } from "next/router";
 import InputField from "../../components/InputField";
 import Wrapper from "../../components/Wrapper";
 import { errorArrayToMap } from "../../utils/errorArrayToMap";
-import { useChangePasswordMutation } from "../../graphql/generated/graphql";
+import {
+  CurrentUserDocument,
+  CurrentUserQuery,
+  useChangePasswordMutation,
+} from "../../graphql/generated/graphql";
 import { useState } from "react";
 import NextLink from "next/link";
 import { withApollo } from "../../utils/withApollo";
@@ -26,6 +30,15 @@ const ResetPassword: React.FC = ({}) => {
                 typeof router.query.token === "string"
                   ? router.query.token
                   : "",
+            },
+            update: (cache, { data }) => {
+              cache.writeQuery<CurrentUserQuery>({
+                query: CurrentUserDocument,
+                data: {
+                  __typename: "Query",
+                  current_user: data?.changePassword.user,
+                },
+              });
             },
           });
           if (response.data?.changePassword.errors) {

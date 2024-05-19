@@ -21,8 +21,9 @@ import { BiChat, BiShare } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa6";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
-import { useLikeMutation } from "../graphql/generated/graphql";
+import { Post, useLikeMutation } from "../graphql/generated/graphql";
 import { PostActions } from "./PostActions";
+import gql from "graphql-tag";
 
 interface PostData {
   id: number;
@@ -143,7 +144,37 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             }
             sx={cardActionSx}
             onClick={() => {
-              like({ variables: { postId: post.id } });
+              like({
+                variables: { postId: post.id },
+                update: (cache) => {
+                  const data = cache.readFragment<Post>({
+                    id: "Post:" + post.id,
+                    fragment: gql`
+                      fragment _ on Post {
+                        id
+                        points
+                        likeStatus
+                      }
+                    `,
+                  });
+                  if (data) {
+                    const newPoints = data.likeStatus
+                      ? (data.points as number) - 1
+                      : (data.points as number) + 1;
+                    const newStatus = data.likeStatus ? null : 1;
+                    cache.writeFragment({
+                      id: "Post:" + post.id,
+                      fragment: gql`
+                        fragment points on Post {
+                          points
+                          likeStatus
+                        }
+                      `,
+                      data: { points: newPoints, likeStatus: newStatus },
+                    });
+                  }
+                },
+              });
             }}
           >
             <Show breakpoint="(min-width: 290px)">
