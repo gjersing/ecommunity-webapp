@@ -1,6 +1,6 @@
 import { Container } from "../components/Container";
 import { NavBar } from "../components/NavBar";
-import { PostsQuery, usePostsQuery } from "../graphql/generated/graphql";
+import { usePostsQuery } from "../graphql/generated/graphql";
 import { VStack, Spinner } from "@chakra-ui/react";
 import { PostCard } from "../components/PostCard";
 import { useEffect } from "react";
@@ -11,6 +11,7 @@ const Index = () => {
       limit: 10,
       cursor: null,
     },
+    notifyOnNetworkStatusChange: true,
   });
 
   // TO DO: Remove for v1.0
@@ -32,23 +33,6 @@ const Index = () => {
             cursor: data
               ? data.posts.posts[data.posts.posts.length - 1].createdAt
               : null,
-          },
-          updateQuery: (previousValue, { fetchMoreResult }): PostsQuery => {
-            if (!fetchMoreResult) {
-              return previousValue;
-            }
-
-            return {
-              __typename: "Query",
-              posts: {
-                __typename: "PaginatedPosts",
-                hasMore: fetchMoreResult.posts.hasMore,
-                posts: [
-                  ...previousValue.posts.posts,
-                  ...fetchMoreResult.posts.posts,
-                ],
-              },
-            };
           },
         });
       }
