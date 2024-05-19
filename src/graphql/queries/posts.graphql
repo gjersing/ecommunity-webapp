@@ -4,6 +4,7 @@ query Posts($limit: Int!, $cursor: String) {
     posts {
       id
       body
+      img
       points
       likeStatus
       createdAt

@@ -1,7 +1,7 @@
-import { Button, Card, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Card, Flex, Heading, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { NavBar } from "../components/NavBar";
 import TextAreaField from "../components/TextAreaField";
 import Wrapper from "../components/Wrapper";
@@ -9,11 +9,14 @@ import { useCreatePostMutation } from "../graphql/generated/graphql";
 import { useIsAuth } from "../utils/useIsAuth";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { withApollo } from "../utils/withApollo";
+import Dropzone from "react-dropzone";
 
 const CreatePost: React.FC = ({}) => {
   const router = useRouter();
   useIsAuth();
   const [createPost] = useCreatePostMutation();
+  const [fileToUpload, setFileToUpload] = useState<File | undefined>(undefined);
+  const [invalidUpload, setInvalidUpload] = useState(false);
 
   return (
     <div className="createPost-container">
@@ -23,7 +26,7 @@ const CreatePost: React.FC = ({}) => {
           initialValues={{ body: "" }}
           onSubmit={async (values, actions) => {
             const response = await createPost({
-              variables: { input: values },
+              variables: { input: values, file: fileToUpload },
               update: (cache) => {
                 cache.evict({ fieldName: "posts" });
               },
@@ -53,6 +56,56 @@ const CreatePost: React.FC = ({}) => {
                   placeholder="What on 🌎 is going on?"
                   label=""
                 />
+                <Dropzone
+                  maxFiles={1}
+                  accept={{
+                    "image/*": [".jpeg", ".jpg", ".png", ".heic", ".heif"],
+                  }}
+                  onDropAccepted={(acceptedFiles) => {
+                    setInvalidUpload(false);
+                    const file = acceptedFiles[0] as File;
+                    setFileToUpload(file);
+                    console.log(acceptedFiles);
+                  }}
+                  onDropRejected={() => {
+                    setInvalidUpload(true);
+                    setFileToUpload(undefined);
+                    console.log("invalid");
+                  }}
+                >
+                  {({ getRootProps, getInputProps, isDragActive }) => (
+                    <section>
+                      <Box
+                        mt={4}
+                        borderColor="dark"
+                        borderStyle="dashed"
+                        borderWidth="2px"
+                        borderRadius="lg"
+                        backdropBlur={10}
+                        backgroundColor="lightgray"
+                        p={5}
+                        {...getRootProps()}
+                      >
+                        <input accept="image/png" {...getInputProps()} />
+                        {isDragActive ? (
+                          <Text>Drop the image here</Text>
+                        ) : fileToUpload ? (
+                          <Text>📷 ✅</Text>
+                        ) : (
+                          <Text>
+                            Drag 'n' drop your image here, or just click to
+                            select an image🍎
+                          </Text>
+                        )}
+                      </Box>
+                      {invalidUpload ? (
+                        <Text size="sm" color="red">
+                          The uploaded file is invalid.
+                        </Text>
+                      ) : null}
+                    </section>
+                  )}
+                </Dropzone>
                 <Flex>
                   <Button
                     mt={4}
@@ -60,6 +113,7 @@ const CreatePost: React.FC = ({}) => {
                     colorScheme="green"
                     isLoading={props.isSubmitting}
                     type="submit"
+                    isDisabled={!fileToUpload}
                     width={28}
                   >
                     Share Post

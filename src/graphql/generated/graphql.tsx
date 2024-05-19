@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Upload: { input: any; output: any; }
 };
 
 export type FieldError = {
@@ -44,6 +45,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreatePostArgs = {
+  file: Scalars['Upload']['input'];
   input: PostInput;
 };
 
@@ -92,6 +94,7 @@ export type Post = {
   body: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
+  img: Scalars['String']['output'];
   likeStatus?: Maybe<Scalars['Int']['output']>;
   points: Scalars['Float']['output'];
   updatedAt: Scalars['String']['output'];
@@ -104,7 +107,7 @@ export type PostInput = {
 export type PostResponse = {
   __typename?: 'PostResponse';
   errors?: Maybe<Array<FieldError>>;
-  post?: Maybe<Post>;
+  post?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type Query = {
@@ -147,9 +150,9 @@ export type UsernamePasswordInput = {
   username: Scalars['String']['input'];
 };
 
-export type DefaultPostFragment = { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string };
+export type DefaultPostFragment = { __typename?: 'Post', id: number, body: string, img: string, points: number, authorId: number, createdAt: string };
 
-export type DefaultPostResponseFragment = { __typename?: 'PostResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, post?: { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string } | null };
+export type DefaultPostResponseFragment = { __typename?: 'PostResponse', post?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null };
 
 export type DefaultUserFragment = { __typename?: 'User', id: number, username: string };
 
@@ -167,10 +170,11 @@ export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: 
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
+  file: Scalars['Upload']['input'];
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, post?: { __typename?: 'Post', id: number, body: string, points: number, authorId: number, createdAt: string } | null } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostResponse', post?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -231,7 +235,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, body: string, points: number, likeStatus?: number | null, createdAt: string, author: { __typename?: 'User', id: number, username: string, email: string } } | null };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, body: string, img: string, points: number, likeStatus?: number | null, createdAt: string, author: { __typename?: 'User', id: number, username: string, email: string } } | null };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -239,21 +243,22 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, body: string, points: number, likeStatus?: number | null, createdAt: string, author: { __typename?: 'User', id: number, username: string, email: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, body: string, img: string, points: number, likeStatus?: number | null, createdAt: string, author: { __typename?: 'User', id: number, username: string, email: string } }> } };
 
-export const RegularErrorFragmentDoc = gql`
-    fragment RegularError on FieldError {
-  field
-  message
-}
-    `;
 export const DefaultPostFragmentDoc = gql`
     fragment DefaultPost on Post {
   id
   body
+  img
   points
   authorId
   createdAt
+}
+    `;
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on FieldError {
+  field
+  message
 }
     `;
 export const DefaultPostResponseFragmentDoc = gql`
@@ -261,12 +266,9 @@ export const DefaultPostResponseFragmentDoc = gql`
   errors {
     ...RegularError
   }
-  post {
-    ...DefaultPost
-  }
+  post
 }
-    ${RegularErrorFragmentDoc}
-${DefaultPostFragmentDoc}`;
+    ${RegularErrorFragmentDoc}`;
 export const DefaultUserFragmentDoc = gql`
     fragment DefaultUser on User {
   id
@@ -319,8 +321,8 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreatePostDocument = gql`
-    mutation CreatePost($input: PostInput!) {
-  createPost(input: $input) {
+    mutation CreatePost($input: PostInput!, $file: Upload!) {
+  createPost(input: $input, file: $file) {
     ...DefaultPostResponse
   }
 }
@@ -341,6 +343,7 @@ export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, C
  * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
  *   variables: {
  *      input: // value for 'input'
+ *      file: // value for 'file'
  *   },
  * });
  */
@@ -620,6 +623,7 @@ export const PostDocument = gql`
   post(id: $id) {
     id
     body
+    img
     points
     likeStatus
     createdAt
@@ -671,6 +675,7 @@ export const PostsDocument = gql`
     posts {
       id
       body
+      img
       points
       likeStatus
       createdAt

@@ -21,9 +21,14 @@ import { BiChat, BiShare } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa6";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
-import { Post, useLikeMutation } from "../graphql/generated/graphql";
+import {
+  Post,
+  useCurrentUserQuery,
+  useLikeMutation,
+} from "../graphql/generated/graphql";
 import { PostActions } from "./PostActions";
 import gql from "graphql-tag";
+import { useRouter } from "next/router";
 
 interface PostData {
   id: number;
@@ -33,6 +38,7 @@ interface PostData {
     email: string;
   };
   body: string;
+  img: string;
   points: number;
   likeStatus?: number | null | undefined;
   createdAt: string;
@@ -50,6 +56,7 @@ const cardActionSx = {
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const createdAtDate = moment(new Date(parseInt(post.createdAt)));
   const hoursSincePosting = moment().diff(createdAtDate, "hours");
+  const router = useRouter();
 
   const postDate =
     hoursSincePosting > 24 * 5
@@ -57,6 +64,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       : createdAtDate.fromNow();
 
   const [like] = useLikeMutation();
+  const { data: userData } = useCurrentUserQuery();
 
   const [seeMore, setSeeMore] = useState(post.body.length > 150);
   const cardBody = (
@@ -120,8 +128,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           width="800px"
           maxHeight={["350px", "425px", "500px", "580px"]}
           objectPosition="center"
-          src="https://us1-photo.nextdoor.com/post_photos/4b/ed/4bed03ee10cb58fd2b3d11e684302d87.jpeg?request_version=v2&output_type=jpeg&sizing=linear"
-          alt={post.id + " Image"}
+          src={post.img}
+          alt={"Image for Post:" + post.id}
         />
       </NextLink>
       <CardFooter
@@ -144,37 +152,41 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             }
             sx={cardActionSx}
             onClick={() => {
-              like({
-                variables: { postId: post.id },
-                update: (cache) => {
-                  const data = cache.readFragment<Post>({
-                    id: "Post:" + post.id,
-                    fragment: gql`
-                      fragment _ on Post {
-                        id
-                        points
-                        likeStatus
-                      }
-                    `,
-                  });
-                  if (data) {
-                    const newPoints = data.likeStatus
-                      ? (data.points as number) - 1
-                      : (data.points as number) + 1;
-                    const newStatus = data.likeStatus ? null : 1;
-                    cache.writeFragment({
+              if (userData?.current_user) {
+                like({
+                  variables: { postId: post.id },
+                  update: (cache) => {
+                    const data = cache.readFragment<Post>({
                       id: "Post:" + post.id,
                       fragment: gql`
-                        fragment points on Post {
+                        fragment _ on Post {
+                          id
                           points
                           likeStatus
                         }
                       `,
-                      data: { points: newPoints, likeStatus: newStatus },
                     });
-                  }
-                },
-              });
+                    if (data) {
+                      const newPoints = data.likeStatus
+                        ? (data.points as number) - 1
+                        : (data.points as number) + 1;
+                      const newStatus = data.likeStatus ? null : 1;
+                      cache.writeFragment({
+                        id: "Post:" + post.id,
+                        fragment: gql`
+                          fragment points on Post {
+                            points
+                            likeStatus
+                          }
+                        `,
+                        data: { points: newPoints, likeStatus: newStatus },
+                      });
+                    }
+                  },
+                });
+              } else {
+                router.push("/login");
+              }
             }}
           >
             <Show breakpoint="(min-width: 290px)">

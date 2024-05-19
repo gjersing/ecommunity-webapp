@@ -1,6 +1,7 @@
 fragment DefaultPost on Post {
   id
   body
+  img
   points
   authorId
   createdAt
