@@ -15,9 +15,9 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import moment from "moment";
-import NextLink from "next/link";
+// import NextLink from "next/link";
 import React, { useState } from "react";
-import { BiChat, BiShare } from "react-icons/bi";
+import { BiShare } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa6";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
@@ -122,16 +122,16 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </Flex>
       </CardHeader>
       {cardBody}
-      <NextLink href="/post[id]" as={`/post/${post.id}`}>
-        <Image
-          objectFit="cover"
-          width="800px"
-          maxHeight={["350px", "425px", "500px", "580px"]}
-          objectPosition="center"
-          src={post.img}
-          alt={"Image for Post:" + post.id}
-        />
-      </NextLink>
+      {/* <NextLink href="/post[id]" as={`/post/${post.id}`}> */}
+      <Image
+        objectFit="cover"
+        width="800px"
+        maxHeight={["350px", "425px", "500px", "580px"]}
+        objectPosition="center"
+        src={post.img}
+        alt={"Image for Post:" + post.id}
+      />
+      {/* </NextLink> */}
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
@@ -193,9 +193,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               <Text color={post.likeStatus ? "red" : "black"}>Like</Text>
             </Show>
           </Button>
-          <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>
+          {/* <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Comment</Show>
-          </Button>
+          </Button> */}
           <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Share</Show>
           </Button>
