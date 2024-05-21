@@ -9,7 +9,7 @@ export const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   return (
     <Box
       mt={8}
-      maxWidth={["90vw", null, null, "70vw", "50vw"]}
+      maxWidth={["100vw", "90vw", null, "70vw", "50vw"]}
       width="100%"
       mx="auto"
       justifyContent={"center"}

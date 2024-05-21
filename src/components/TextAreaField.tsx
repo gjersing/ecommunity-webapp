@@ -27,7 +27,7 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
         placeholder={props.placeholder}
         id={field.name}
         resize="none"
-        rows={4}
+        rows={1}
       />
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
