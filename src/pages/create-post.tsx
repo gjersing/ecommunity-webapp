@@ -122,7 +122,11 @@ const CreatePost: React.FC = ({}) => {
                             p={5}
                             {...getRootProps()}
                           >
-                            <input accept="image/png" {...getInputProps()} />
+                            <input
+                              accept="image/*"
+                              type="file"
+                              {...getInputProps()}
+                            />
                             {isDragActive ? (
                               <Center>
                                 <FaBoxOpen size="10rem" />
