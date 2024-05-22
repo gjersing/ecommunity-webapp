@@ -1,5 +1,7 @@
 ECOmmunity - Social Media For Nature Lovers
 
+https://www.ecommunity.us
+
 This repository contains the frontend UI logic for the application.
 
 Tech: React, Typescript, Nextjs, Chakra
