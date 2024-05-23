@@ -55,16 +55,20 @@ export const CardModal: React.FC<CardModalProps> = ({
         allowPinchZoom
       >
         <ModalOverlay backdropFilter="blur(10px)" />
-        <ModalContent maxWidth="800px" pt={2}>
+        <ModalContent maxWidth="800px" pt={4}>
           <Flex
             flex="1"
             gap="4"
             alignItems="center"
             flexWrap="wrap"
             pb={2}
-            pl={2}
+            pl={4}
           >
-            <Avatar name={post.author.username} />
+            <IconButton
+              aria-label="visit author profile"
+              icon={<Avatar name={post.author.username} />}
+              isRound
+            />
             <Box>
               <Heading size="sm">{post.author.username}</Heading>
               <HStack>
