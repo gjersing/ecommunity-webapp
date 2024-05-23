@@ -26,7 +26,8 @@ const Index = () => {
         document.documentElement;
       if (
         scrollTop + clientHeight >= scrollHeight - 20 &&
-        data?.posts.hasMore
+        data?.posts.hasMore &&
+        !loading
       ) {
         fetchMore({
           variables: {
