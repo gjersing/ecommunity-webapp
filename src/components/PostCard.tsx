@@ -13,11 +13,11 @@ import {
   Show,
   Text,
   Tooltip,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import moment from "moment";
-// import NextLink from "next/link";
 import React, { useState } from "react";
-import { BiShare } from "react-icons/bi";
+import { BiChat, BiShare } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa6";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
@@ -29,20 +29,8 @@ import {
 import { PostActions } from "./PostActions";
 import gql from "graphql-tag";
 import { useRouter } from "next/router";
-
-interface PostData {
-  id: number;
-  author: {
-    id: number;
-    username: string;
-    email: string;
-  };
-  body: string;
-  img: string;
-  points: number;
-  likeStatus?: number | null | undefined;
-  createdAt: string;
-}
+import { PostData } from "../types";
+import { CardModal } from "./CardModal";
 
 interface PostCardProps {
   post: PostData;
@@ -58,6 +46,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const hoursSincePosting = moment().diff(createdAtDate, "hours");
   const router = useRouter();
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const bodyLength =
+    useBreakpointValue({ base: 100, sm: 130, md: 180 }, { fallback: "md" }) ||
+    100;
+
   const postDate =
     hoursSincePosting > 24 * 5
       ? createdAtDate.format("D MMM")
@@ -65,30 +59,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   const [like] = useLikeMutation();
   const { data: userData } = useCurrentUserQuery();
-
-  const [seeMore, setSeeMore] = useState(post.body.length > 150);
-  const cardBody = (
-    <CardBody pt={0} pb={4}>
-      <Text height={!seeMore ? "auto" : 9}>
-        {!seeMore ? post.body : post.body.slice(0, 120) + "..."}
-      </Text>
-      {seeMore ? (
-        <Flex>
-          <Text
-            mt={-3}
-            mr={4}
-            ml="auto"
-            color="gray"
-            onClick={() => {
-              setSeeMore(!seeMore);
-            }}
-          >
-            See More
-          </Text>
-        </Flex>
-      ) : null}
-    </CardBody>
-  );
 
   return (
     <Card
@@ -121,8 +91,19 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           />
         </Flex>
       </CardHeader>
-      {cardBody}
-      {/* <NextLink href="/post[id]" as={`/post/${post.id}`}> */}
+      <CardBody
+        pt={0}
+        pb={4}
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      >
+        <Text>
+          {post.body.length > bodyLength
+            ? post.body.slice(0, bodyLength - 20) + " ..."
+            : post.body}
+        </Text>
+      </CardBody>
       <Image
         objectFit="cover"
         width="800px"
@@ -130,8 +111,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         objectPosition="center"
         src={post.img}
         alt={"Image for Post:" + post.id}
+        onClick={() => {
+          setModalOpen(true);
+        }}
       />
-      {/* </NextLink> */}
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
@@ -193,14 +176,22 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               <Text color={post.likeStatus ? "red" : "black"}>Like</Text>
             </Show>
           </Button>
-          {/* <Button variant="ghost" leftIcon={<BiChat />} sx={cardActionSx}>
+          <Button
+            variant="ghost"
+            leftIcon={<BiChat />}
+            sx={cardActionSx}
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
             <Show breakpoint="(min-width: 844px)">Comment</Show>
-          </Button> */}
+          </Button>
           <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Share</Show>
           </Button>
         </Flex>
       </CardFooter>
+      <CardModal post={post} open={modalOpen} setModalOpen={setModalOpen} />
     </Card>
   );
 };
