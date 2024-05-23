@@ -14,7 +14,10 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { NavBar } from "../components/NavBar";
 import TextAreaField from "../components/TextAreaField";
-import { useCreatePostMutation } from "../graphql/generated/graphql";
+import {
+  useCreatePostMutation,
+  useCurrentUserQuery,
+} from "../graphql/generated/graphql";
 import { useIsAuth } from "../utils/useIsAuth";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
 import { withApollo } from "../utils/withApollo";
@@ -29,6 +32,7 @@ const CreatePost: React.FC = ({}) => {
   const [fileToUpload, setFileToUpload] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState("");
   const [invalidUpload, setInvalidUpload] = useState(false);
+  const { data: userData } = useCurrentUserQuery();
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks
@@ -95,7 +99,19 @@ const CreatePost: React.FC = ({}) => {
                     }}
                     onDropAccepted={(acceptedFiles) => {
                       setInvalidUpload(false);
-                      const file = acceptedFiles[0] as File;
+                      const renamedAcceptedFiles = acceptedFiles.map(
+                        (file) =>
+                          new File(
+                            [file],
+                            `${
+                              userData?.current_user?.id
+                            }_${+new Date()}.${file.name.split(".").pop()}`,
+                            {
+                              type: file.type,
+                            }
+                          )
+                      );
+                      const file = renamedAcceptedFiles[0];
                       setFileToUpload(file);
                       setPreview(URL.createObjectURL(file));
                     }}
