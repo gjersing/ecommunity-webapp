@@ -12,7 +12,7 @@ const Index = () => {
       limit: 4,
       cursor: null,
     },
-    notifyOnNetworkStatusChange: true,
+    // notifyOnNetworkStatusChange: true,
   });
 
   // TO DO: Remove for v1.0
