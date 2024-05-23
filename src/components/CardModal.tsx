@@ -13,11 +13,13 @@ import {
   ModalOverlay,
   Text,
   Image,
+  Show,
+  IconButton,
 } from "@chakra-ui/react";
 import { PostData } from "../types";
 import { gql } from "@apollo/client";
 import router from "next/router";
-import { IoHeart, IoHeartOutline } from "react-icons/io5";
+import { IoClose, IoHeart, IoHeartOutline } from "react-icons/io5";
 import {
   Post,
   useCurrentUserQuery,
@@ -53,13 +55,13 @@ export const CardModal: React.FC<CardModalProps> = ({
         allowPinchZoom
       >
         <ModalOverlay backdropFilter="blur(10px)" />
-        <ModalContent maxWidth="800px">
+        <ModalContent maxWidth="800px" pt={2}>
           <Flex
             flex="1"
             gap="4"
             alignItems="center"
             flexWrap="wrap"
-            py={2}
+            pb={2}
             pl={2}
           >
             <Avatar name={post.author.username} />
@@ -72,7 +74,21 @@ export const CardModal: React.FC<CardModalProps> = ({
               </HStack>
             </Box>
           </Flex>
-          <ModalCloseButton />
+          <Show breakpoint="(max-width:1000px)">
+            <IconButton
+              aria-label="close post"
+              icon={<IoClose size={28} />}
+              position="fixed"
+              isRound
+              right={2}
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            />
+          </Show>
+          <Show breakpoint="(min-width:1000px)">
+            <ModalCloseButton />
+          </Show>
           <Text p={2}>{post.body}</Text>
           <Image
             src={post.img}
