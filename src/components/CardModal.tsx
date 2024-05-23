@@ -3,7 +3,7 @@ import {
   Avatar,
   Box,
   Button,
-  Divider,
+  // Divider,
   Flex,
   Heading,
   HStack,
@@ -82,8 +82,8 @@ export const CardModal: React.FC<CardModalProps> = ({
             }}
           />
           <Flex alignItems="center" p={2}>
-            // TO DO: add comments length in parenthesis
-            <Heading size="sm">Comments</Heading>
+            {/* // TO DO: add comments length in parenthesis */}
+            {/* <Heading size="sm">Comments</Heading> */}
             <Button
               variant="ghost"
               leftIcon={
@@ -134,8 +134,8 @@ export const CardModal: React.FC<CardModalProps> = ({
               </Text>
             </Button>
           </Flex>
-          <Divider mb={2} />
-          // TO DO: iterate over comments and output
+          {/* <Divider mb={2} /> */}
+          {/* // TO DO: iterate over comments and output */}
         </ModalContent>
       </Modal>
       {imageOpen ? (

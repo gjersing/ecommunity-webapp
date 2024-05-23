@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useState } from "react";
-import { BiChat, BiShare } from "react-icons/bi";
+import { BiShare } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa6";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
@@ -176,7 +176,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               <Text color={post.likeStatus ? "red" : "black"}>Like</Text>
             </Show>
           </Button>
-          <Button
+          {/* <Button
             variant="ghost"
             leftIcon={<BiChat />}
             sx={cardActionSx}
@@ -185,7 +185,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             }}
           >
             <Show breakpoint="(min-width: 844px)">Comment</Show>
-          </Button>
+          </Button> */}
           <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Share</Show>
           </Button>
