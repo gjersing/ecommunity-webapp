@@ -13,19 +13,19 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  Textarea,
+  Input,
 } from "@chakra-ui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaRegFlag } from "react-icons/fa";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 import {
-  useDeletePostMutation,
-  useUpdatePostMutation,
   useCurrentUserQuery,
+  useDeleteCommentMutation,
+  useUpdateCommentMutation,
 } from "../graphql/generated/graphql";
 import { ActionsProps } from "../types";
 
-export const PostActions: React.FC<ActionsProps> = ({
+export const CommentActions: React.FC<ActionsProps> = ({
   body,
   authorId,
   postId,
@@ -39,8 +39,8 @@ export const PostActions: React.FC<ActionsProps> = ({
   } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
-  const [deletePost] = useDeletePostMutation();
-  const [updatePost] = useUpdatePostMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [updateComment] = useUpdateCommentMutation();
   const { data: userData } = useCurrentUserQuery();
 
   const userId = userData?.current_user?.id;
@@ -58,27 +58,32 @@ export const PostActions: React.FC<ActionsProps> = ({
         variant="ghost"
         colorScheme="gray"
         aria-label="See menu"
+        ml="auto"
       />
       <MenuList>
         {validUser ? (
-          <MenuItem icon={<LuPencil />} aria-label="Edit Post" onClick={onOpen}>
-            Edit Post
+          <MenuItem
+            icon={<LuPencil />}
+            aria-label="Edit Comment"
+            onClick={onOpen}
+          >
+            Edit Comment
           </MenuItem>
         ) : null}
         <MenuItem
           icon={<FaRegFlag />}
-          aria-label="Report Post"
+          aria-label="Report Comment"
           onClick={() => {}}
         >
-          Report Post
+          Report Comment
         </MenuItem>
         {validUser ? (
           <MenuItem
             icon={<LuTrash2 />}
-            aria-label="Delete Post"
+            aria-label="Delete Comment"
             onClick={onDeleteOpen}
           >
-            Delete Post
+            Delete Comment
           </MenuItem>
         ) : null}
       </MenuList>
@@ -90,10 +95,10 @@ export const PostActions: React.FC<ActionsProps> = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Edit Post
+              Edit Comment
             </AlertDialogHeader>
             <AlertDialogBody>
-              <Textarea
+              <Input
                 value={editBody}
                 onChange={handleEditChange}
                 placeholder={body}
@@ -106,10 +111,11 @@ export const PostActions: React.FC<ActionsProps> = ({
               <Button
                 colorScheme="green"
                 onClick={() => {
-                  updatePost({ variables: { id: postId, body: editBody } });
+                  updateComment({ variables: { id: postId, body: editBody } });
                   onClose();
                 }}
                 ml={3}
+                type="submit"
               >
                 Update
               </Button>
@@ -126,7 +132,7 @@ export const PostActions: React.FC<ActionsProps> = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Post
+              Delete Comment
             </AlertDialogHeader>
             <AlertDialogBody>
               Are you sure? You can't undo this action afterwards.
@@ -138,10 +144,10 @@ export const PostActions: React.FC<ActionsProps> = ({
               <Button
                 colorScheme="red"
                 onClick={() => {
-                  deletePost({
+                  deleteComment({
                     variables: { id: postId },
                     update: (cache) => {
-                      cache.evict({ id: "Post:" + postId });
+                      cache.evict({ id: "Comment:" + postId });
                     },
                   });
                   onDeleteClose();

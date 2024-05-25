@@ -17,8 +17,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useState } from "react";
-import { BiShare } from "react-icons/bi";
-import { FaHeart } from "react-icons/fa6";
+import { BiShare, BiChat } from "react-icons/bi";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import {
@@ -37,7 +36,6 @@ interface PostCardProps {
 }
 
 const cardActionSx = {
-  minWidth: "60px",
   flex: "1",
 };
 
@@ -98,7 +96,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           setModalOpen(true);
         }}
       >
-        <Text>
+        <Text cursor="pointer">
           {post.body.length > bodyLength
             ? post.body.slice(0, bodyLength - 20) + " ..."
             : post.body}
@@ -114,6 +112,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         onClick={() => {
           setModalOpen(true);
         }}
+        cursor="pointer"
       />
       <CardFooter
         justify="space-between"
@@ -122,12 +121,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         py={2}
       >
         <Flex alignItems={"center"} gap={2} ml={2}>
-          <FaHeart color="red" />
-          <Heading size="sm" color={post.likeStatus ? "red" : "black"}>
-            {post.points}
-          </Heading>
-        </Flex>
-        <Flex gap={[1, 2, null, 3]}>
           <Button
             variant="ghost"
             leftIcon={
@@ -172,11 +165,13 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               }
             }}
           >
-            <Show breakpoint="(min-width: 290px)">
-              <Text color={post.likeStatus ? "red" : "black"}>Like</Text>
-            </Show>
+            <Heading size="sm" color={post.likeStatus ? "red" : "black"}>
+              {post.points}
+            </Heading>
           </Button>
-          {/* <Button
+        </Flex>
+        <Flex gap={[1, 2, null, 3]}>
+          <Button
             variant="ghost"
             leftIcon={<BiChat />}
             sx={cardActionSx}
@@ -184,14 +179,20 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               setModalOpen(true);
             }}
           >
-            <Show breakpoint="(min-width: 844px)">Comment</Show>
-          </Button> */}
+            <Show breakpoint="(min-width: 844px)">Comment </Show>(
+            {post.comments?.length || 0})
+          </Button>
           <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Share</Show>
           </Button>
         </Flex>
       </CardFooter>
-      <CardModal post={post} open={modalOpen} setModalOpen={setModalOpen} />
+      <CardModal
+        post={post}
+        open={modalOpen}
+        setModalOpen={setModalOpen}
+        key={post.id + "Modal"}
+      />
     </Card>
   );
 };
