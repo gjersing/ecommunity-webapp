@@ -39,6 +39,7 @@ const Index = () => {
         next={fetchData}
         hasMore={data?.posts.hasMore || false}
         loader={<Spinner />}
+        style={{ overflow: "visible" }}
       >
         <VStack my={8} spacing={8} maxW={["100vw", "90vw", "80vw", "600px"]}>
           {!data ? (
