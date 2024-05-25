@@ -1,0 +1,14 @@
+fragment DefaultCommentResponse on CommentResponse {
+  errors {
+    ...RegularError
+  }
+  comment {
+    id
+    body
+    username
+    userId
+    postId
+    createdAt
+    updatedAt
+  }
+}

@@ -4,6 +4,13 @@ query Post($id: Int!) {
     body
     img
     points
+    comments {
+      id
+      body
+      username
+      userId
+      createdAt
+    }
     likeStatus
     createdAt
     author {

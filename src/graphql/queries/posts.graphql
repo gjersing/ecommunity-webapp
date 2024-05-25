@@ -6,6 +6,13 @@ query Posts($limit: Int!, $cursor: String) {
       body
       img
       points
+      comments {
+        id
+        body
+        username
+        userId
+        createdAt
+      }
       likeStatus
       createdAt
       author {
