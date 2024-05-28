@@ -9,7 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const Index = () => {
   const { data, error, loading, fetchMore, variables } = usePostsQuery({
     variables: {
-      limit: 4,
+      limit: 8,
       cursor: null,
     },
     notifyOnNetworkStatusChange: true,
