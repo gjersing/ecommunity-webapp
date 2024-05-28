@@ -136,7 +136,23 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         px={[2, 3, 4, 5]}
         py={2}
       >
-        <Flex alignItems={"center"} gap={2} ml={2}>
+        <Flex gap={[1, 2, null, 3]}>
+          <Button
+            variant="ghost"
+            leftIcon={<BiChat />}
+            sx={cardActionSx}
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
+            <Show breakpoint="(min-width: 844px)">Comment </Show>(
+            {post.comments?.length || 0})
+          </Button>
+          {/* <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
+            <Show breakpoint="(min-width: 844px)">Share</Show>
+          </Button> */}
+        </Flex>
+        <Flex alignItems={"center"} gap={2}>
           <Button
             variant="ghost"
             leftIcon={
@@ -185,22 +201,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               {post.points}
             </Heading>
           </Button>
-        </Flex>
-        <Flex gap={[1, 2, null, 3]}>
-          <Button
-            variant="ghost"
-            leftIcon={<BiChat />}
-            sx={cardActionSx}
-            onClick={() => {
-              setModalOpen(true);
-            }}
-          >
-            <Show breakpoint="(min-width: 844px)">Comment </Show>(
-            {post.comments?.length || 0})
-          </Button>
-          {/* <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
-            <Show breakpoint="(min-width: 844px)">Share</Show>
-          </Button> */}
         </Flex>
       </CardFooter>
       <CardModal
