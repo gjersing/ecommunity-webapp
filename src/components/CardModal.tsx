@@ -28,7 +28,7 @@ import {
   useLikeMutation,
 } from "../graphql/generated/graphql";
 import moment from "moment";
-import { BiChat } from "react-icons/bi";
+import { BiShare, BiChat } from "react-icons/bi";
 import { Form, Formik } from "formik";
 import { errorArrayToMap } from "../utils/errorArrayToMap";
 import TextAreaField from "../components/TextAreaField";
@@ -176,9 +176,9 @@ export const CardModal: React.FC<CardModalProps> = ({
               {post.points} Likes
             </Text>
           </Button>
-          {/* <Button variant="ghost" leftIcon={<BiShare />} minW="60px">
+          <Button variant="ghost" leftIcon={<BiShare />} minW="60px">
             <Show breakpoint="(min-width: 844px)">Share</Show>
-          </Button> */}
+          </Button>
         </Flex>
         <Formik
           initialValues={{ body: "" }}
