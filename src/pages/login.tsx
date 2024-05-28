@@ -98,7 +98,7 @@ const Login: React.FC<loginProps> = ({}) => {
                     label="Password"
                     type="Password"
                   />
-                  <Flex>
+                  {/* <Flex>
                     <Link
                       href="/forgot-password"
                       as={NextLink}
@@ -109,7 +109,7 @@ const Login: React.FC<loginProps> = ({}) => {
                     >
                       Forgot password?
                     </Link>
-                  </Flex>
+                  </Flex> */}
                 </Box>
                 <Button
                   mt={2}
