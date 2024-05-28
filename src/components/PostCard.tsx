@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useState } from "react";
-import { BiShare, BiChat } from "react-icons/bi";
+import { BiChat } from "react-icons/bi";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { PiGlobeSimpleThin } from "react-icons/pi";
 import {
@@ -82,6 +82,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 onClick={() => {
                   router.push(`/${post.author.username}`);
                 }}
+                cursor="pointer"
               >
                 {post.author.username}
               </Heading>
@@ -197,9 +198,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <Show breakpoint="(min-width: 844px)">Comment </Show>(
             {post.comments?.length || 0})
           </Button>
-          <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
+          {/* <Button variant="ghost" leftIcon={<BiShare />} sx={cardActionSx}>
             <Show breakpoint="(min-width: 844px)">Share</Show>
-          </Button>
+          </Button> */}
         </Flex>
       </CardFooter>
       <CardModal
