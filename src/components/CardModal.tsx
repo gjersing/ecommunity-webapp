@@ -74,10 +74,20 @@ export const CardModal: React.FC<CardModalProps> = ({
           <IconButton
             aria-label="visit author profile"
             icon={<Avatar name={post.author.username} />}
+            onClick={() => {
+              router.push(`/${post.author.username}`);
+            }}
             isRound
           />
           <Box>
-            <Heading size="sm">{post.author.username}</Heading>
+            <Heading
+              size="sm"
+              onClick={() => {
+                router.push(`/${post.author.username}`);
+              }}
+            >
+              {post.author.username}
+            </Heading>
             <HStack>
               <Text display={"inline"} color="gray" suppressHydrationWarning>
                 Posted {createdAtDate}
@@ -257,6 +267,9 @@ export const CardModal: React.FC<CardModalProps> = ({
                         icon={
                           <Avatar name={comment.username || "?"} size="sm" />
                         }
+                        onClick={() => {
+                          router.push(`/${comment.username}`);
+                        }}
                         isRound
                       />
                       <Heading size="sm" ml={1}>

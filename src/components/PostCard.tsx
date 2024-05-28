@@ -14,6 +14,7 @@ import {
   Text,
   Tooltip,
   useBreakpointValue,
+  IconButton,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useState } from "react";
@@ -67,9 +68,23 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <CardHeader p={[2, 3, 4, 5]} py={[2, 3, 4, 4]}>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name={post.author.username} />
+            <IconButton
+              aria-label="visit author profile"
+              icon={<Avatar name={post.author.username} />}
+              onClick={() => {
+                router.push(`/${post.author.username}`);
+              }}
+              isRound
+            />
             <Box>
-              <Heading size="sm">{post.author.username}</Heading>
+              <Heading
+                size="sm"
+                onClick={() => {
+                  router.push(`/${post.author.username}`);
+                }}
+              >
+                {post.author.username}
+              </Heading>
               <HStack>
                 <Text display={"inline"} color="gray" suppressHydrationWarning>
                   {postDate} •

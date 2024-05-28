@@ -1,0 +1,25 @@
+query UserPosts($username: String!) {
+  userPosts(username: $username) {
+    isReal
+    posts {
+      id
+      body
+      img
+      points
+      comments {
+        id
+        body
+        username
+        userId
+        createdAt
+      }
+      likeStatus
+      createdAt
+      author {
+        id
+        username
+        email
+      }
+    }
+  }
+}
